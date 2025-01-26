@@ -8,28 +8,31 @@ datasource db {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
-  username       String    @db.VarChar(50) 
-  email          String    @unique @db.VarChar(100)
-  passwordHashed String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id             Int        @id @default(autoincrement())
+  username       String     @db.VarChar(50)
+  email          String     @unique @db.VarChar(100)
+  hashedPassword String?
+  provider       String?
+  providerId     String?
+  accessToken    String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   passwords      Password[]
 }
 
 model Password {
-  id                 Int       @id @default(autoincrement())
-  userId             Int      
-  siteName           String    @db.VarChar(100) 
-  siteUrl            String    @db.VarChar(255)
-  encryptedPassword  String
-  category           String?   
-  strength           String?   
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  usageCount         Int       @default(0) // Default to 0 for better usage tracking
-  user               User      @relation(fields: [userId], references: [id])
+  id                Int      @id @default(autoincrement())
+  userId            Int
+  siteName          String   @db.VarChar(100)
+  siteUrl           String   @db.VarChar(255)
+  encryptedPassword String
+  category          String?
+  strength          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  usageCount        Int      @default(0) // Default to 0 for better usage tracking
+  user              User     @relation(fields: [userId], references: [id])
 
-  @@index([userId])           
-  @@index([siteName])         
+  @@index([userId])
+  @@index([siteName])
 }
