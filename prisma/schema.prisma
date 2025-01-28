@@ -8,31 +8,75 @@ datasource db {
 }
 
 model User {
-  id             Int        @id @default(autoincrement())
-  username       String     @db.VarChar(50)
-  email          String     @unique @db.VarChar(100)
-  hashedPassword String?
-  provider       String?
-  providerId     String?
-  accessToken    String?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-  passwords      Password[]
+  id            String          @id @default(cuid()) // Unique user ID
+  name          String?         // Optional: User's name (from OAuth profile)
+  email         String          @unique // User's email, required
+  emailVerified DateTime?       // Optional: Email verification timestamp
+  image         String?         // Optional: Profile image URL from OAuth
+  accounts      Account[]       // Relation to OAuth accounts
+  sessions      Session[]       // Relation to active sessions
+  passwords     Password[]      // Custom relation to stored passwords
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Account {
+  id                 String   @id @default(cuid()) // Unique ID for each account
+  userId             String   // Foreign key linking to the User model
+  type               String   // Type of account (e.g., OAuth)
+  provider           String   // OAuth provider name (e.g., "google")
+  providerAccountId  String   // Unique account ID from the provider
+  refresh_token      String?  // Refresh token for the provider
+  access_token       String?  // Access token for the provider
+  expires_at         Int?     // Token expiration time
+  token_type         String?  // Type of token (e.g., "Bearer")
+  scope              String?  // Scope of access granted by the provider
+  id_token           String?  // ID token (if provided by the provider)
+  session_state      String?  // OAuth session state (optional)
+
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([provider, providerAccountId]) // Ensures a unique account per provider
+}
+
+model Session {
+  id           String   @id @default(cuid()) // Unique session ID
+  sessionToken String   @unique // Token used to identify the session
+  userId       String   // Foreign key linking to the User model
+  expires      DateTime // Session expiration timestamp
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String // Identifier for email verification
+  token      String // Verification token
+  expires    DateTime // Expiration timestamp for the token
+
+  @@id([identifier, token]) // Composite primary key
 }
 
 model Password {
-  id                Int      @id @default(autoincrement())
-  userId            Int
-  siteName          String   @db.VarChar(100)
-  siteUrl           String   @db.VarChar(255)
-  encryptedPassword String
-  category          String?
-  strength          String?
+  id                Int      @id @default(autoincrement()) // Auto-incremented password ID
+  userId            String   // Foreign key linking to the User model
+  siteName          String   @db.VarChar(100) // Name of the site (e.g., "Google")
+  siteUrl           String   @db.VarChar(255) // URL of the site
+  encryptedPassword String   // AES-encrypted password
+  category          String?  // Optional: Password category (e.g., "Work", "Personal")
+  strength          String?  // Optional: Password strength indicator
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  usageCount        Int      @default(0) // Default to 0 for better usage tracking
+  usageCount        Int      @default(0) // Tracks how often the password is used
+
   user              User     @relation(fields: [userId], references: [id])
 
-  @@index([userId])
-  @@index([siteName])
+  @@index([userId])           // Index for efficient lookups by userId
+  @@index([siteName])         // Index for efficient search by siteName
 }
