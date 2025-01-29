@@ -25,7 +25,7 @@ model User {
   id            String     @id @default(cuid()) // Unique user ID
   name          String? // Optional: User's name (from OAuth profile)
   email         String     @unique @db.VarChar(320) // User's email, required
-  emailVerified DateTime? // Optional: Email verification timestamp
+  emailVerified DateTime
   image         String? // Optional: Profile image URL from OAuth
   accounts      Account[] // Relation to OAuth accounts
   sessions      Session[] // Relation to active sessions
@@ -67,6 +67,8 @@ model Session {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId]) // Index for efficient lookups by userId
 }
 
 model VerificationToken {
@@ -89,7 +91,6 @@ model Password {
   strength          PasswordStrength? // Optional: Password strength indicator
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
-  usageCount        Int               @default(0) // Tracks how often the password is used
 
   user User @relation(fields: [userId], references: [id])
 
