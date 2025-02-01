@@ -25,7 +25,7 @@ model User {
   id            String     @id @default(cuid()) // Unique user ID
   name          String? // Optional: User's name (from OAuth profile)
   email         String     @unique @db.VarChar(320) // User's email, required
-  emailVerified DateTime
+  emailVerified DateTime?
   image         String? // Optional: Profile image URL from OAuth
   accounts      Account[] // Relation to OAuth accounts
   sessions      Session[] // Relation to active sessions
@@ -41,12 +41,12 @@ model Account {
   type              String // Type of account (e.g., OAuth)
   provider          String // OAuth provider name (e.g., "google")
   providerAccountId String // Unique account ID from the provider
-  refresh_token     String? @db.VarChar(1024) // Refresh token for the provider
-  access_token      String? @db.VarChar(1024) // Access token for the provider
+  refresh_token     String? @db.VarChar(2048) // Refresh token for the provider
+  access_token      String? @db.VarChar(2048) // Access token for the provider
   expires_at        Int? // Token expiration time
   token_type        String? // Type of token (e.g., "Bearer")
   scope             String? // Scope of access granted by the provider
-  id_token          String? @db.VarChar(1024) // ID token (if provided by the provider)
+  id_token          String? @db.VarChar(2048) // ID token (if provided by the provider)
   session_state     String? // OAuth session state (optional)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
