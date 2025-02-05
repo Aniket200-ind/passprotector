@@ -87,6 +87,7 @@ model Password {
   siteName          String            @db.VarChar(100) // Name of the site (e.g., "Google")
   siteUrl           String            @db.VarChar(255) // URL of the site
   encryptedPassword String            @db.VarChar(512) // AES-encrypted password
+  iv                String            @db.VarChar(128) // Initialization vector for AES-encryption
   category          PasswordCategory? // Optional: Password category (e.g., "Work", "Personal")
   strength          PasswordStrength? // Optional: Password strength indicator
   createdAt         DateTime          @default(now())
