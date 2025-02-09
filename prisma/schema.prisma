@@ -62,9 +62,6 @@ model Session {
   sessionToken String   @unique // Token used to identify the session
   userId       String // Foreign key linking to the User model
   expires      DateTime // Session expiration timestamp
-  userAgent String? @db.VarChar(512) // User agent string of the user's browser
-  ipAddress String? @db.VarChar(45) // IP address of the user's device
-  lastActivity DateTime? @updatedAt // Timestamp of the last activity
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -96,10 +93,6 @@ model Password {
   strength          PasswordStrength? // Optional: Password strength indicator
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
-  accessCount Int @default(0) // Number of times the password has been accessed
-  lastAccessedAt DateTime? // Timestamp of the last access
-  failedAttempts Int @default(0) // Number of failed login attempts
-  lockUntil DateTime? // Timestamp of when the password will be locked
 
   user User @relation(fields: [userId], references: [id])
 
