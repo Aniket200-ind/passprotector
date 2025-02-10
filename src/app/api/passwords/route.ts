@@ -87,3 +87,66 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 }
+
+/**
+ * API route to retrieve all passwords for a user.
+ * Ensures authentication before processing the requests.
+ *
+ * @param {NextRequest} req - The incoming request object.
+ * @returns {Promise<NextResponse>} - The response object.
+ */
+
+export async function GET(): Promise<NextResponse> {
+  try {
+    // Authenticate the user
+    const session = await auth();
+    if (!session || !session.user?.email) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Find the user in the database
+    const userEmail = session.user.email;
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+      include: { passwords: true },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    // Decrypt passwords before sending response
+    const decryptPasswords = user.passwords.map((password) => ({
+      id: password.id,
+      siteName: password.siteName,
+      siteUrl: password.siteUrl,
+      decryptedPassword: decryptAESGCM(
+        {
+          encryptedText: password.encryptedPassword,
+          iv: password.iv,
+          authTag: password.authTag,
+        }
+      ),
+      category: password.category,
+      strength: password.strength,
+      createdAt: password.createdAt,
+    }));
+
+    return NextResponse.json(
+      { success: true, passwords: decryptPasswords },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error in GET /api/passwords:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
