@@ -10,15 +10,15 @@ datasource db {
 // Enums
 
 enum PasswordStrength {
-  weak
-  medium
-  strong
+  Weak
+  Medium
+  Strong
 }
 
 enum PasswordCategory {
-  personal
-  work
-  finance
+  Personal
+  Work
+  Finance
 }
 
 model User {
