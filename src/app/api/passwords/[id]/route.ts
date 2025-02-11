@@ -91,4 +91,106 @@ export async function GET(
   }
 }
 
+/**
+ * API route to update one or more fields of a password.
+ * @param {Object} params - Route parameters (including password ID).
+ * @returns {Promise<NextResponse>} - The response object.
+ */
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    // Authenticate the user
+    const session = await auth();
+    if (!session || !session.user?.email) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Extract the password ID from route parameters
+    const passwordId = (await params).id;
+    if (!passwordId) {
+      return NextResponse.json(
+        { success: false, message: "Password ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate user ownership
+    const userEmail = session.user.email;
+    const existingPassword = await prisma.password.findUnique({
+      where: { id: passwordId },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!existingPassword || existingPassword.user.email !== userEmail) {
+      return NextResponse.json(
+        { success: false, message: "Password not found or access denied" },
+        { status: 404 }
+      );
+    }
+
+    // Parse and validate request body
+    const body = await req.json();
+    const parsedData = PasswordUpdateSchema.safeParse(body);
+    if (!parsedData.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid input",
+          errors: parsedData.error.format(),
+        },
+        { status: 400 }
+      );
+    }
+
+    // Prepare data for updating
+    let updatedData = { ...parsedData.data };
+
+    // Encrypt new password if provided
+    if (parsedData.data.encryptedPassword) {
+      const { encryptedText, iv, authTag } = encryptAESGCM(
+        parsedData.data.encryptedPassword
+      );
+      updatedData = {
+        ...updatedData,
+        encryptedPassword: encryptedText,
+        iv,
+        authTag,
+      };
+    }
+
+    // Remove undefined fields from the update payload
+    const filteredData = Object.fromEntries(
+      Object.entries(updatedData).filter(([, value]) => value !== undefined)
+    );
+
+    // Update password record in the database
+    const updatedPassword = await prisma.password.update({
+      where: { id: passwordId },
+      data: filteredData,
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Password updated successfully",
+        updatedPassword,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error in PATCH /api/passwords/[id]:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
 
