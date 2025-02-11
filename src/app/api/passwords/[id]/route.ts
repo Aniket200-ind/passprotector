@@ -194,3 +194,75 @@ export async function PATCH(
 }
 
 
+/**
+ * API route to delete a password by ID.
+ * @param {Object} params - Route parameters (including password ID).
+ * @returns {Promise<NextResponse>} - The response object.
+ */
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    // Authenticate the user
+    const session = await auth();
+    if (!session || !session.user?.email) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Extract the password ID from route parameters
+    const passwordId = (await params).id;
+    if (!passwordId) {
+      return NextResponse.json(
+        { success: false, message: "Password ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Find the password record in the database
+    const password = await prisma.password.findUnique({
+      where: { id: passwordId },
+      include: {
+        user: true,
+      },
+    });
+
+    // Check if the password exists
+    if (!password) {
+      return NextResponse.json(
+        { success: false, message: "Password not found" },
+        { status: 404 }
+      );
+    }
+
+    // Ensure the password belongs to the authenticated user
+    if (password.user.email !== session.user.email) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Forbidden: You don't have permission to delete this password",
+        },
+        { status: 403 }
+      );
+    }
+
+    // Delete the password from the database
+    await prisma.password.delete({ where: { id: passwordId } });
+
+    // Return success response
+    return NextResponse.json(
+      { success: true, message: "Password deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error in DELETE /api/passwords/[id]:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
