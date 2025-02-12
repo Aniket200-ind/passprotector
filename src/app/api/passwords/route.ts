@@ -5,11 +5,16 @@ import { auth } from "@/auth";
 import { encryptAESGCM, decryptAESGCM } from "@/lib/passwords/encryption";
 import { prisma } from "@/lib/prisma";
 import { PasswordCreateSchema } from "@/lib/validation";
+import { hashPassword } from "@/lib/passwords/hash";
 
 /**
  * API route to handle password storage
+ * 
  * Ensures authentication before processing the requests.
- *
+ * Encrypts the password using AES-GCM encryption.
+ * Hashes the password using PBKDF2 algorithm for duplicate detection.
+ * Stores the password in the database.
+ * 
  * @param {NextRequest} req - The incoming request object.
  * @returns {Promise<NextResponse>} - The response object.
  */
@@ -55,6 +60,30 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Encrypt the password
     const { siteName, siteUrl, password, category, strength } = parsedData.data;
+
+    // Validate request body
+    if (!siteName || !siteUrl || !password) {
+      return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
+    }
+
+    // Hash password using PBKDF2 algorithm (for duplicate detection)
+    const hashedPassword = await hashPassword(password);
+
+    // Check if the hashed password already exists in the database for the user
+    const existingPassword = await prisma.password.findFirst({
+      where: {
+        userId: user.id,
+        hashedPassword: hashedPassword,
+      },
+    });
+
+    if (existingPassword) {
+      return NextResponse.json(
+        { success: false, message: "Duplicate password detected" },
+        { status: 409 }
+      );
+    }
+
     const { encryptedText, iv, authTag } = encryptAESGCM(password);
 
     // Store the password in the database
@@ -66,6 +95,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         encryptedPassword: encryptedText,
         iv,
         authTag,
+        hashedPassword,
         category: category,
         strength: strength,
       },
@@ -133,6 +163,7 @@ export async function GET(): Promise<NextResponse> {
           authTag: password.authTag,
         }
       ),
+      hashedPassword: password.hashedPassword,
       category: password.category,
       strength: password.strength,
       createdAt: password.createdAt,
