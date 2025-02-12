@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { decryptAESGCM, encryptAESGCM } from "@/lib/passwords/encryption";
+import { hashPassword } from "@/lib/passwords/hash";
 import { prisma } from "@/lib/prisma";
 import { PasswordUpdateSchema } from "@/lib/validation";
 import { NextRequest, NextResponse } from "next/server";
@@ -93,6 +94,10 @@ export async function GET(
 
 /**
  * API route to update one or more fields of a password.
+ * - Ensures new password is not a duplicate
+ * - Encrypts the new password before storing
+ * - Updates the password in the database
+ * 
  * @param {Object} params - Route parameters (including password ID).
  * @returns {Promise<NextResponse>} - The response object.
  */
@@ -121,14 +126,23 @@ export async function PATCH(
 
     // Validate user ownership
     const userEmail = session.user.email;
-    const existingPassword = await prisma.password.findUnique({
-      where: { id: passwordId },
-      include: {
-        user: true,
-      },
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+      include: { passwords: true },
     });
 
-    if (!existingPassword || existingPassword.user.email !== userEmail) {
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    const existingPassword = await prisma.password.findUnique({
+      where: { id: passwordId },
+    });
+
+    if (!existingPassword || existingPassword.userId !== user.id) {
       return NextResponse.json(
         { success: false, message: "Password not found or access denied" },
         { status: 404 }
@@ -149,19 +163,46 @@ export async function PATCH(
       );
     }
 
+
     // Prepare data for updating
     let updatedData = { ...parsedData.data };
 
-    // Encrypt new password if provided
-    if (parsedData.data.encryptedPassword) {
+    // If a new password is provided, check for duplicates before encrypting
+    if (parsedData.data.password) {
+
+      // Generate hash of the new password
+      const hashedPassword = await hashPassword(parsedData.data.password);
+
+      // Check if the hashed password already exists for the user
+      const duplicatePassword = await prisma.password.findFirst({
+        where: {
+          userId: session.user.id,
+          hashedPassword,
+          id: { not: passwordId },
+        }
+      })
+
+      if (duplicatePassword) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Duplicate password detected",
+          },
+          { status: 409 }
+        );
+      }
+
+      // Encrypt the new password
       const { encryptedText, iv, authTag } = encryptAESGCM(
-        parsedData.data.encryptedPassword
+        parsedData.data.password
       );
+
       updatedData = {
         ...updatedData,
         encryptedPassword: encryptedText,
         iv,
         authTag,
+        hashedPassword,
       };
     }
 
