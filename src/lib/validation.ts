@@ -9,6 +9,7 @@ export const PasswordCreateSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters").max(64, "Password too long"),
   category: z.nativeEnum(PasswordCategory).optional(),
   strength: z.nativeEnum(PasswordStrength).optional(),
+  hashedPassword: z.string().optional(),
 });
 
 // Schema for updating an existing password entry
@@ -17,9 +18,11 @@ export const PasswordUpdateSchema = z.object({
   siteUrl: z.string().url("Invalid URL").optional(),
   category: z.string().optional(),
   strength: z.enum(["Weak", "Medium", "Strong"]).optional(),
-  encryptedPassword: z.string().min(8, "Password must be at least 8 characters").optional(),
+  password: z.string().min(8, "Password must be at least 8 characters").optional(),
+  encryptedPassword: z.string().optional(),
   iv: z.string().optional(),
   authTag: z.string().optional(),
+  hashedPassword: z.string().optional(),
 });
 
   // Type inference from Zod
