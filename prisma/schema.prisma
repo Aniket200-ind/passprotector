@@ -10,6 +10,7 @@ datasource db {
 // Enums
 
 enum PasswordStrength {
+  VULNERABLE
   Weak
   Medium
   Strong
