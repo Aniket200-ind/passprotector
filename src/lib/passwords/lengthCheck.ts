@@ -1,18 +1,19 @@
-import { MIN_LENGTH, RECOMMENDED_LENGTH,MAX_LENGTH } from "./strengthCriteria";
-
 /**
- * Checks if a password meets the required length criteria.
- * @param {string} password - The password string to evaluate.
- * @returns {number} - A numberic score indicating compliance with length requirements.
+ * Checks the length of the password and assigns a score.
+ * @param password - The password to check.
+ * @returns {number} Length-based score.
  */
-export const checkPasswordLength = (password: string): number => {
+export const checkLength = (password: string): number => {
+  try {
     const length = password.length;
 
-    if (length < MIN_LENGTH) return 0;
+    if (length >= 12) return 30;
+    if (length >= 8) return 20;
+    if (length >= 6) return 10;
 
-    if (length >= RECOMMENDED_LENGTH) return 40; // Bonus points for longer passwords
-
-    if (length <= MAX_LENGTH) return 20;
-
-    return 10;
-}
+    return 0;
+  } catch (error) {
+    console.error("[ERROR] Failed in lengthCheck:", error);
+    return 0;
+  }
+};
