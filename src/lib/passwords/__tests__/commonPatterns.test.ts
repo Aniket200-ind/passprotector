@@ -1,34 +1,34 @@
-import { checkForCommonPasswords } from "../commonPatterns";
+import { isCommonPassword } from "../commonPatterns";
 
 // Note: We assume that commonPasswordsData (imported in commonPatterns.ts)
 // contains common passwords like "password", "123456", and "qwerty".
 
-describe("checkForCommonPasswords", () => {
-  it("returns -50 for a known common password (all lowercase)", () => {
-    expect(checkForCommonPasswords("password")).toBe(-50);
+describe("isCommonPassword", () => {
+  it("returns true for a known common password (exact match)", () => {
+    // Assuming "password" is in common-passwords.json.
+    expect(isCommonPassword("password")).toBe(true);
   });
 
-  it("returns -50 for a known common password (mixed case)", () => {
-    // Function should be case-insensitive.
-    expect(checkForCommonPasswords("PassWord")).toBe(-50);
+  it("returns false for a common password in a different case", () => {
+    // No case normalization is applied, so "PassWord" will not match "password".
+    expect(isCommonPassword("PassWord")).toBe(false);
   });
 
-  it("returns 0 for a password not in the common list", () => {
-    expect(checkForCommonPasswords("UniquePass123!")).toBe(0);
+  it("returns false for a password that is not common", () => {
+    expect(isCommonPassword("UniquePass123!")).toBe(false);
   });
 
-  it("returns 0 for a password that is similar but not identical due to extra whitespace", () => {
-    // Spaces are not trimmed; thus 'password ' or ' password' are not exact matches.
-    expect(checkForCommonPasswords("password ")).toBe(0);
-    expect(checkForCommonPasswords(" password")).toBe(0);
+  it("returns false for a password with extra whitespace", () => {
+    // Spaces are not trimmed before lookup.
+    expect(isCommonPassword("password ")).toBe(false);
+    expect(isCommonPassword(" password")).toBe(false);
   });
 
-  it("returns 0 for a variant with slight character modifications", () => {
-    // e.g. replacing o with 0 (zero) makes it different.
-    expect(checkForCommonPasswords("p4ssw0rd")).toBe(0);
+  it("returns false for an empty string", () => {
+    expect(isCommonPassword("")).toBe(false);
   });
 
-  it("returns 0 for an empty string", () => {
-    expect(checkForCommonPasswords("")).toBe(0);
+  it("returns false for a password that contains only spaces", () => {
+    expect(isCommonPassword("   ")).toBe(false);
   });
 });
