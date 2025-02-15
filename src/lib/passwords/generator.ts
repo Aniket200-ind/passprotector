@@ -19,6 +19,9 @@ export type PassswordOptions = {
 // Define the path to wordlist
 const WORDLIST_PATH = path.join(process.cwd(), "src/lib/passwords/wordlist.json");
 
+//? Load the wordlist once into memory at startup
+const wordlist = JSON.parse(fs.readFileSync(WORDLIST_PATH, "utf-8"));
+
 // Alowwed special symbols
 const SYMBOLS = "!@#$%^&*()_+-={}[]<>?";
 
@@ -75,19 +78,13 @@ export const generateRandomPassword = (options: PassswordOptions): string => {
  * @returns {Promise<string>} - A randomly selected word.
  */
 const getRandomWord = async (): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        fs.readFile(WORDLIST_PATH, "utf-8", (err, data) =>{
-            if (err) return reject("Failed to read wordlist");
-
-            try{
-                const words: string[] = JSON.parse(data);
-                const randomIndex = crypto.randomInt(0, words.length - 1);
-                resolve(words[randomIndex]);
-            }catch(error){
-                reject(`[Error] Failed to parse wordlist JSON: ${error}`);
-            }
-        })
-    })
+    try{
+        const randomIndex = crypto.randomInt(0, wordlist.length);
+        return wordlist[randomIndex];
+    }catch(error){
+        console.error("[ERROR] Failed to get random word:", error);
+        return "error";
+    }
 }
 
 /**
