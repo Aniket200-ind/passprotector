@@ -15,7 +15,7 @@ export const PasswordGeneratorSchema = z.object({
 });
 
 /**
- * Validation schema for the passphrase generaotr API.
+ * Validation schema for the passphrase generator API.
  * Ensures user input adheres to latest security recommendations and standards.
  */
 export const PassphraseGeneratorSchema = z.object({
