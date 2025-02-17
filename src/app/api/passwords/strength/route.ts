@@ -5,9 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { RatelimitResponse } from "@/lib/types/ratelimit";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // Initialize the Upstash redis client
 const redis = new Redis({
