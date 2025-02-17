@@ -1,31 +1,36 @@
-// src/app/api/passwords/route.ts
+//! app/api/passwords/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
 import { encryptAESGCM, decryptAESGCM } from "@/lib/passwords/encryption";
 import { prisma } from "@/lib/prisma";
 import { PasswordCreateSchema } from "@/lib/validation";
 import { hashPassword } from "@/lib/passwords/hash";
+import { requireAuth } from "@/lib/authHelper";
 
 /**
  * API route to handle password storage
- * 
+ *
  * Ensures authentication before processing the requests.
  * Encrypts the password using AES-GCM encryption.
  * Hashes the password using PBKDF2 algorithm for duplicate detection.
  * Stores the password in the database.
- * 
+ *
  * @param {NextRequest} req - The incoming request object.
  * @returns {Promise<NextResponse>} - The response object.
  */
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    // Authenticate the user
-    const session = await auth();
-    if (!session || !session.user?.email) {
+    // Use the helper function to check for authentication status
+    const authResult = await requireAuth();
+    if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
+
+    const session = authResult;
+
+    const userEmail = session.user?.email;
+    if (!userEmail) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
+        { success: false, message: "Unauthorized access: Missing email" },
         { status: 401 }
       );
     }
@@ -46,7 +51,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     // Find the user in the database
-    const userEmail = session.user.email;
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
     });
@@ -63,7 +67,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Validate request body
     if (!siteName || !siteUrl || !password) {
-      return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     // Hash password using PBKDF2 algorithm (for duplicate detection)
@@ -128,17 +135,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 export async function GET(): Promise<NextResponse> {
   try {
-    // Authenticate the user
-    const session = await auth();
-    if (!session || !session.user?.email) {
+    // Use the helper function to check for authentication status
+    const authResult = await requireAuth();
+    if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
+
+    const session = authResult;
+
+    const userEmail = session.user?.email;
+    if (!userEmail) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
+        { success: false, message: "Unauthorized access: Missing email" },
         { status: 401 }
       );
     }
 
     // Find the user in the database
-    const userEmail = session.user.email;
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
       include: { passwords: true },
@@ -156,13 +167,11 @@ export async function GET(): Promise<NextResponse> {
       id: password.id,
       siteName: password.siteName,
       siteUrl: password.siteUrl,
-      decryptedPassword: decryptAESGCM(
-        {
-          encryptedText: password.encryptedPassword,
-          iv: password.iv,
-          authTag: password.authTag,
-        }
-      ),
+      decryptedPassword: decryptAESGCM({
+        encryptedText: password.encryptedPassword,
+        iv: password.iv,
+        authTag: password.authTag,
+      }),
       hashedPassword: password.hashedPassword,
       category: password.category,
       strength: password.strength,
