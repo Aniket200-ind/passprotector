@@ -1,4 +1,6 @@
-import { auth } from "@/auth";
+//! app/api/passwords/[id]/route.ts
+
+import { requireAuth } from "@/lib/authHelper";
 import { decryptAESGCM, encryptAESGCM } from "@/lib/passwords/encryption";
 import { hashPassword } from "@/lib/passwords/hash";
 import { prisma } from "@/lib/prisma";
@@ -15,14 +17,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    // Authenticate the user
-    const session = await auth();
-    if (!session || !session.user?.email) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    // Use the helper function to check for authentication status
+    const authResult = await requireAuth();
+    if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
+
+    const session = authResult;
 
     // Extract the password ID from route parameters
     const passwordId = (await params).id;
@@ -47,7 +46,13 @@ export async function GET(
     }
 
     // Ensure the password belongs to the authenticated user
-    const userEmail = session.user.email;
+    const userEmail = session.user?.email;
+    if (!userEmail) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized access: Missing email" },
+        { status: 401 }
+      );
+    }
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
       include: { passwords: true },
@@ -97,7 +102,7 @@ export async function GET(
  * - Ensures new password is not a duplicate
  * - Encrypts the new password before storing
  * - Updates the password in the database
- * 
+ *
  * @param {Object} params - Route parameters (including password ID).
  * @returns {Promise<NextResponse>} - The response object.
  */
@@ -106,11 +111,25 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    // Authenticate the user
-    const session = await auth();
-    if (!session || !session.user?.email) {
+    // Use the helper function to check for authentication status
+    const authResult = await requireAuth();
+    if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
+
+    const session = authResult;
+
+    // Validate user ownership
+    const userEmail = session.user?.email;
+    const sessionUserId = session.user?.id;
+    if (!userEmail) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
+        { success: false, message: "Unauthorized access: Missing email" },
+        { status: 401 }
+      );
+    }
+
+    if (!sessionUserId) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized access: Missing user ID" },
         { status: 401 }
       );
     }
@@ -124,8 +143,6 @@ export async function PATCH(
       );
     }
 
-    // Validate user ownership
-    const userEmail = session.user.email;
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
       include: { passwords: true },
@@ -142,7 +159,7 @@ export async function PATCH(
       where: { id: passwordId },
     });
 
-    if (!existingPassword || existingPassword.userId !== user.id) {
+    if (!existingPassword || existingPassword.userId !== sessionUserId) {
       return NextResponse.json(
         { success: false, message: "Password not found or access denied" },
         { status: 404 }
@@ -163,52 +180,72 @@ export async function PATCH(
       );
     }
 
+    if (Object.keys(parsedData.data).length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "No fields to update",
+        },
+        { status: 400 }
+      );
+    }
 
     // Prepare data for updating
     let updatedData = { ...parsedData.data };
 
     // If a new password is provided, check for duplicates before encrypting
     if (parsedData.data.password) {
+      try {
+        // Generate hash of the new password
+        const hashedPassword = await hashPassword(parsedData.data.password);
 
-      // Generate hash of the new password
-      const hashedPassword = await hashPassword(parsedData.data.password);
-
-      // Check if the hashed password already exists for the user
-      const duplicatePassword = await prisma.password.findFirst({
-        where: {
-          userId: session.user.id,
-          hashedPassword,
-          id: { not: passwordId },
-        }
-      })
-
-      if (duplicatePassword) {
-        return NextResponse.json(
-          {
-            success: false,
-            message: "Duplicate password detected",
+        // Check if the hashed password already exists for the user
+        const duplicatePassword = await prisma.password.findFirst({
+          where: {
+            userId: sessionUserId,
+            hashedPassword,
           },
-          { status: 409 }
+        });
+
+        if (duplicatePassword) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "Duplicate password detected",
+            },
+            { status: 409 }
+          );
+        }
+
+        // Encrypt the new password
+        const { encryptedText, iv, authTag } = encryptAESGCM(
+          parsedData.data.password
         );
+
+        // Create a new object excluding the plaintext password and including the encrypted password
+        const { password, ...safeData } = parsedData.data;
+        let plaintext = password;
+
+        updatedData = {
+          ...safeData,
+          encryptedPassword: encryptedText,
+          iv,
+          authTag,
+          hashedPassword,
+        };
+
+        // Clear the password from memory
+        plaintext = "123";
+        console.log(plaintext);
+      } finally {
+        // Explicitly clear the password from memory
+        parsedData.data.password = undefined;
       }
-
-      // Encrypt the new password
-      const { encryptedText, iv, authTag } = encryptAESGCM(
-        parsedData.data.password
-      );
-
-      updatedData = {
-        ...updatedData,
-        encryptedPassword: encryptedText,
-        iv,
-        authTag,
-        hashedPassword,
-      };
     }
 
-    // Remove undefined fields from the update payload
+    // Filter out undefined values
     const filteredData = Object.fromEntries(
-      Object.entries(updatedData).filter(([, value]) => value !== undefined)
+      Object.entries(updatedData).filter(([, v]) => v !== undefined)
     );
 
     // Update password record in the database
@@ -234,7 +271,6 @@ export async function PATCH(
   }
 }
 
-
 /**
  * API route to delete a password by ID.
  * @param {Object} params - Route parameters (including password ID).
@@ -245,11 +281,16 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    // Authenticate the user
-    const session = await auth();
-    if (!session || !session.user?.email) {
+    // Use the helper function to check for authentication status
+    const authResult = await requireAuth();
+    if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
+
+    const session = authResult;
+
+    const userEmail = session.user?.email;
+    if (!userEmail) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
+        { success: false, message: "Unauthorized access: Missing email" },
         { status: 401 }
       );
     }
@@ -280,7 +321,7 @@ export async function DELETE(
     }
 
     // Ensure the password belongs to the authenticated user
-    if (password.user.email !== session.user.email) {
+    if (password.user.email !== userEmail) {
       return NextResponse.json(
         {
           success: false,
