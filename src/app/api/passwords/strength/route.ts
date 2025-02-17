@@ -1,3 +1,5 @@
+//! app/api/passwords/strength/route.ts
+
 import { evaluatePasswordStrength } from "@/lib/passwords/strength";
 import { NextRequest, NextResponse } from "next/server";
 
