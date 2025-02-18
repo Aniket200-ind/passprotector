@@ -18,7 +18,7 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(20, "60s"),
   prefix: "upstash/ratelimit",
   analytics: true,
-  timeout: 60,
+  timeout: 60000,
 })
 
 /**
@@ -43,10 +43,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       // Apply rate limiting
       const { success, limit, remaining, reset }: RatelimitResponse = await ratelimit.limit(ip);
 
+      const date = new Date(reset);
+      const timeUntilReset = Math.floor((date.getTime() - Date.now()) / 1000);
+
       // Log rate limit status
       console.log("Rate limiter executed in /api/passwords/strength");
       console.log(
-        `Max requests: ${limit.toString()}, Remaining: ${remaining.toString()}, Reset: ${reset.toString()}`
+        `Max requests: ${limit.toString()}, Remaining: ${remaining.toString()}, Reset: ${timeUntilReset.toString()} seconds`
       );
 
       // If the request is over the limit, return a 429 status code
