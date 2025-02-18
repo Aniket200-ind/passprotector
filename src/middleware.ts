@@ -30,7 +30,7 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(10, "60s"),
   prefix: "upstash/ratelimit",
   analytics: true,
-  timeout: 60,
+  timeout: 60000,
 });
 
 /**
@@ -54,11 +54,13 @@ export async function middleware(req: NextRequest) {
   // Log rate
   await pending;
 
+  const date = new Date(reset);
+  const timeUntilReset = Math.floor((date.getTime() - Date.now()) / 1000);
+
+  // Log rate limit status
   console.log(`Rate limiter executed in ${req.nextUrl.pathname}`);
   console.log(
-    `Max requests: ${limit}, Remaining: ${remaining}, Reset: ${Math.floor(
-      reset / 1000
-    )} seconds`
+    `Max requests: ${limit.toString()}, Remaining: ${remaining.toString()}, Reset: ${timeUntilReset.toString()} seconds`
   );
 
   // If the request is over the limit, return a 429 status code
