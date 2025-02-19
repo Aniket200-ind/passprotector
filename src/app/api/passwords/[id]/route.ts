@@ -1,6 +1,7 @@
 //! app/api/passwords/[id]/route.ts
 
 import { requireAuth } from "@/lib/authHelper";
+import logger from "@/lib/logger";
 import { decryptAESGCM, encryptAESGCM } from "@/lib/passwords/encryption";
 import { hashPassword } from "@/lib/passwords/hash";
 import { prisma } from "@/lib/prisma";
@@ -17,6 +18,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
+    const startTime = Date.now(); // Start time for measuring request duration
+
     // Use the helper function to check for authentication status
     const authResult = await requireAuth();
     if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
@@ -72,6 +75,17 @@ export async function GET(
       authTag: password.authTag,
     });
 
+    // Log the request details
+    logger.info({
+      timeStamp: new Date().toISOString(),
+      method: req.method,
+      route: "/api/passwords",
+      ip: req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown",
+      status: 200,
+      userId: session.user?.id,
+      executionTime: `${Date.now() - startTime}ms`,
+    });
+
     // Return the decrypted password along with other details
     return NextResponse.json(
       {
@@ -89,7 +103,7 @@ export async function GET(
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in GET /api/passwords/[id]:", error);
+    logger.error("Error in GET /api/passwords/[id]:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
@@ -111,6 +125,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
+    const startTime = Date.now(); // Start time for measuring request duration
+
     // Use the helper function to check for authentication status
     const authResult = await requireAuth();
     if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
@@ -236,7 +252,7 @@ export async function PATCH(
 
         // Clear the password from memory
         plaintext = "123";
-        console.log(plaintext);
+        logger.info(plaintext);
       } finally {
         // Explicitly clear the password from memory
         parsedData.data.password = undefined;
@@ -254,6 +270,17 @@ export async function PATCH(
       data: filteredData,
     });
 
+    // Log the request details
+    logger.info({
+      timeStamp: new Date().toISOString(),
+      method: req.method,
+      route: "/api/passwords",
+      ip: req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown",
+      status: 200,
+      userId: session.user?.id,
+      executionTime: `${Date.now() - startTime}ms`,
+    });
+
     return NextResponse.json(
       {
         success: true,
@@ -263,7 +290,7 @@ export async function PATCH(
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in PATCH /api/passwords/[id]:", error);
+    logger.error("Error in PATCH /api/passwords/[id]:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
@@ -281,6 +308,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
+    const startTime = Date.now(); // Start time for measuring request duration
+
     // Use the helper function to check for authentication status
     const authResult = await requireAuth();
     if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
@@ -335,13 +364,24 @@ export async function DELETE(
     // Delete the password from the database
     await prisma.password.delete({ where: { id: passwordId } });
 
+    // Log the request details
+    logger.info({
+      timeStamp: new Date().toISOString(),
+      method: req.method,
+      route: "/api/passwords",
+      ip: req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown",
+      status: 200,
+      userId: session.user?.id,
+      executionTime: `${Date.now() - startTime}ms`,
+    });
+
     // Return success response
     return NextResponse.json(
       { success: true, message: "Password deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in DELETE /api/passwords/[id]:", error);
+    logger.error("Error in DELETE /api/passwords/[id]:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
