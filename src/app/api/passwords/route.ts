@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { PasswordCreateSchema } from "@/lib/validation";
 import { hashPassword } from "@/lib/passwords/hash";
 import { requireAuth } from "@/lib/authHelper";
+import logger from "@/lib/logger";
+
 
 /**
  * API route to handle password storage
@@ -20,6 +22,8 @@ import { requireAuth } from "@/lib/authHelper";
  */
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  const startTime = Date.now(); // Start time for measuring request duration
+
   try {
     // Use the helper function to check for authentication status
     const authResult = await requireAuth();
@@ -108,6 +112,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       },
     });
 
+    // Log the request
+    logger.info({
+      timeStamp: new Date().toISOString(),
+      method: req.method,
+      route: "/api/passwords",
+      ip: req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown",
+      status: 201,
+      userId: session.user?.id,
+      executionTime: `${Date.now() - startTime}ms`,
+    });
+
     return NextResponse.json(
       {
         success: true,
@@ -117,7 +132,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error in POST /api/passwords:", error);
+    logger.error("Error in POST /api/passwords:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
@@ -133,8 +148,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
  * @returns {Promise<NextResponse>} - The response object.
  */
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
+    const startTime = Date.now(); // Start time for measuring request duration
+
     // Use the helper function to check for authentication status
     const authResult = await requireAuth();
     if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
@@ -178,12 +195,23 @@ export async function GET(): Promise<NextResponse> {
       createdAt: password.createdAt,
     }));
 
+    // Log the request
+    logger.info({
+      timeStamp: new Date().toISOString(),
+      method: req.method,
+      route: "/api/passwords",
+      ip: req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown",
+      status: 200,
+      userId: session.user?.id,
+      executionTime: `${Date.now() - startTime}ms`,
+    });
+
     return NextResponse.json(
       { success: true, passwords: decryptPasswords },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in GET /api/passwords:", error);
+    logger.error("Error in GET /api/passwords:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
