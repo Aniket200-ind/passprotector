@@ -3,7 +3,7 @@
 import { generatePassphrase } from "@/lib/passwords/generator";
 import { PassphraseGeneratorSchema } from "@/lib/validation/generatorSchema";
 import { NextRequest, NextResponse } from "next/server";
-
+import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
 /**
  * @param {NextRequest} req - The incoming request object.
  * @returns {Promise<NextResponse>} res - The outgoing response object.
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Validate request body
     if (!parsedData.success) {
-      return NextResponse.json(
+      const res = NextResponse.json(
         {
           success: false,
           message: "Invalid input",
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         },
         { status: 400 }
       );
+      return await applySecurityHeaders(res);
     }
 
     const { wordCount, includeNumbers, includeSymbols, separator } =
@@ -31,13 +32,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Validate word count
     if (wordCount < 6 || wordCount > 8) {
-      return NextResponse.json(
+      const res = NextResponse.json(
         {
           success: false,
           message: "[ERROR] Invalid word count. Must be between 6 and 8.",
         },
         { status: 400 }
       );
+      return await applySecurityHeaders(res);
     }
 
     // Generate passphrase
@@ -48,13 +50,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       separator
     );
 
-    return NextResponse.json({ success: true, passphrase }, { status: 200 });
+    // **Return final response**
+    const res = NextResponse.json({ success: true, passphrase }, { status: 200 });
+    return await applySecurityHeaders(res);
   } catch (error) {
     console.log("[ERROR] Failed to generate passphrase: ", error);
 
-    return NextResponse.json(
+    const res = NextResponse.json(
       { succes: false, message: "Internal Server Error" },
       { status: 500 }
     );
+    return await applySecurityHeaders(res);
   }
 }
