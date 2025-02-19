@@ -7,6 +7,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { RatelimitResponse } from "@/lib/types/ratelimit";
 import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
+import logger from "@/lib/logger";
 
 // Initialize the Upstash redis client
 const redis = new Redis({
@@ -31,6 +32,8 @@ const ratelimit = new Ratelimit({
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    const startTime = Date.now(); // Start time for measuring request duration
+
      // **Rate limit check**
 
     // Extract IP address from request headers
@@ -46,8 +49,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       const timeUntilReset = Math.floor((date.getTime() - Date.now()) / 1000);
 
       // Log rate limit status
-      console.log("Rate limiter executed in /api/generate/password");
-      console.log(
+      logger.info("Rate limiter executed in /api/generate/password");
+      logger.info(
         `Max requests: ${limit.toString()}, Remaining: ${remaining.toString()}, Reset: ${timeUntilReset.toString()} seconds`
       );
 
@@ -105,9 +108,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // **Final response**
     const res = NextResponse.json({ success: true, password }, { status: 200 });
+
+    // Log request
+    logger.info({
+      timeStamp: new Date().toISOString(),
+      method: req.method,
+      route: "/api/generate/password",
+      ip,
+      status: 200,
+      executionTime: `${Date.now() - startTime}ms`,
+    });
+
     return await applySecurityHeaders(res);
   } catch (error) {
-    console.error("[ERROR] Failed to generate password: ", error);
+    logger.error("[ERROR] Failed to generate password: ", error);
 
     const res = NextResponse.json(
       { success: false, message: "Internal Sever Error" },
