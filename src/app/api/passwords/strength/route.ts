@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { RatelimitResponse } from "@/lib/types/ratelimit";
+import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
 
 // Initialize the Upstash redis client
 const redis = new Redis({
@@ -54,10 +55,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
       // If the request is over the limit, return a 429 status code
       if (!success) {
-        return NextResponse.json(
+        const res = NextResponse.json(
           { message: "Rate limit exceeded. Try again later" },
           { status: 429 }
         );
+        return await applySecurityHeaders(res);
       }
 
 
@@ -66,7 +68,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // **Validate input**
     if (!password || typeof password !== "string" || password.trim() === "") {
-      return NextResponse.json(
+      const res = NextResponse.json(
         {
           success: false,
           message: "Invalid input: password must be a non-empty string.",
@@ -75,14 +77,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           status: 400,
         }
       );
+      return await applySecurityHeaders(res);
     }
 
     // **Evaluate password strength**
 
     const { rating, score } = evaluatePasswordStrength(password);
 
-    // **Return response**
-    return NextResponse.json(
+    // **Return final response**
+    const res = NextResponse.json(
       {
         success: true,
         PasswordStrength: rating,
@@ -92,9 +95,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         status: 200,
       }
     );
+    return await applySecurityHeaders(res);
   } catch (error) {
     console.error("[ERROR] Failed to analyze password strength:", error);
-    return NextResponse.json(
+    const res = NextResponse.json(
       {
         succes: false,
         message: "Internal Server Error",
@@ -103,5 +107,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         status: 500,
       }
     );
+    return await applySecurityHeaders(res);
   }
 }
