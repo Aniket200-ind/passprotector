@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { RatelimitResponse } from "@/lib/types/ratelimit";
+import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
 
 // Initialize the Upstash redis client
 const redis = new Redis({
@@ -52,10 +53,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
       // If the request is over the limit, return a 429 status code
       if (!success) {
-        return NextResponse.json(
+        const res = NextResponse.json(
           { message: "Rate limit exceeded. Try again later" },
           { status: 429 }
         );
+        return await applySecurityHeaders(res);
       }
 
     // Parse and validate request body
@@ -63,7 +65,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const parsedData = PasswordGeneratorSchema.safeParse(body);
 
     if (!parsedData.success) {
-      return NextResponse.json(
+      const res = NextResponse.json(
         {
           success: false,
           message: "Invalid input",
@@ -71,7 +73,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         },
         { status: 400 }
       );
+      return await applySecurityHeaders(res)
     }
+
 
     // Ensure at least one character type is selected
     const {
@@ -86,25 +90,29 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       !includeNumbers &&
       !includeSymbols
     ) {
-      return NextResponse.json(
+      const res = NextResponse.json(
         {
           success: false,
           message: "At least one character type must be selected",
         },
         { status: 400 }
       );
+      return await applySecurityHeaders(res);
     }
 
     // Generate password
     const password = generateRandomPassword(parsedData.data);
 
-    return NextResponse.json({ success: true, password }, { status: 200 });
+    // **Final response**
+    const res = NextResponse.json({ success: true, password }, { status: 200 });
+    return await applySecurityHeaders(res);
   } catch (error) {
     console.error("[ERROR] Failed to generate password: ", error);
 
-    return NextResponse.json(
+    const res = NextResponse.json(
       { success: false, message: "Internal Sever Error" },
       { status: 500 }
     );
+    return await applySecurityHeaders(res);
   }
 }
