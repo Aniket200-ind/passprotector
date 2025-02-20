@@ -1,3 +1,5 @@
+//! ./prisma/schema.prisma 
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,8 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums
-
+// Enums for password strength and category
 enum PasswordStrength {
   VULNERABLE
   Weak
