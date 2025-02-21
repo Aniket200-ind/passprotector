@@ -5,9 +5,9 @@ import { auth } from "@/auth";
 import { Session } from "next-auth";
 
 /**
- * Checks for a valid session before processing the request.
- * Returns the session object if valid.
- * If not authenticated, returns a NextResponse error response
+ * *Checks for a valid session before processing the request.
+ * *Returns the session object if valid.
+ * *If not authenticated, returns a NextResponse error response
  *
  * @returns {Promise<Session | NextResponse>} - The session object or NextResponse error response.
  */
