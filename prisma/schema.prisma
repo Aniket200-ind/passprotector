@@ -9,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums for password strength and category
+//* Enums for password strength and category
 enum PasswordStrength {
   VULNERABLE
   Weak
@@ -24,81 +24,81 @@ enum PasswordCategory {
 }
 
 model User {
-  id            String     @id @default(cuid()) // Unique user ID
-  name          String? // Optional: User's name (from OAuth profile)
-  email         String     @unique @db.VarChar(320) // User's email, required
+  id            String     @id @default(cuid()) //* Unique user ID
+  name          String? //* Optional: User's name (from OAuth profile)
+  email         String     @unique @db.VarChar(320) //* User's email, required
   emailVerified DateTime?
-  image         String? // Optional: Profile image URL from OAuth
-  accounts      Account[] // Relation to OAuth accounts
-  sessions      Session[] // Relation to active sessions
-  passwords     Password[] // Custom relation to stored passwords
+  image         String? //* Optional: Profile image URL from OAuth
+  accounts      Account[] //* Relation to OAuth accounts
+  sessions      Session[] //* Relation to active sessions
+  passwords     Password[] //* Custom relation to stored passwords
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Account {
-  id                String  @id @default(cuid()) // Unique ID for each account
-  userId            String // Foreign key linking to the User model
-  type              String // Type of account (e.g., OAuth)
-  provider          String // OAuth provider name (e.g., "google")
-  providerAccountId String // Unique account ID from the provider
-  refresh_token     String? @db.VarChar(2048) // Refresh token for the provider
-  access_token      String? @db.VarChar(2048) // Access token for the provider
-  expires_at        Int? // Token expiration time
-  token_type        String? // Type of token (e.g., "Bearer")
-  scope             String? // Scope of access granted by the provider
-  id_token          String? @db.VarChar(2048) // ID token (if provided by the provider)
-  session_state     String? // OAuth session state (optional)
+  id                String  @id @default(cuid()) //* Unique ID for each account
+  userId            String //* Foreign key linking to the User model
+  type              String //* Type of account (e.g., OAuth)
+  provider          String //* OAuth provider name (e.g., "google")
+  providerAccountId String //* Unique account ID from the provider
+  refresh_token     String? @db.VarChar(2048) //* Refresh token for the provider
+  access_token      String? @db.VarChar(2048) //* Access token for the provider
+  expires_at        Int? //* Token expiration time
+  token_type        String? //* Type of token (e.g., "Bearer")
+  scope             String? //* Scope of access granted by the provider
+  id_token          String? @db.VarChar(2048) //* ID token (if provided by the provider)
+  session_state     String? //* OAuth session state (optional)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([provider, providerAccountId]) // Ensures a unique account per provider
+  @@unique([provider, providerAccountId]) //* Ensures a unique account per provider
 }
 
 model Session {
-  id           String   @id @default(cuid()) // Unique session ID
-  sessionToken String   @unique // Token used to identify the session
-  userId       String // Foreign key linking to the User model
-  expires      DateTime // Session expiration timestamp
+  id           String   @id @default(cuid()) //* Unique session ID
+  sessionToken String   @unique //* Token used to identify the session
+  userId       String //* Foreign key linking to the User model
+  expires      DateTime //* Session expiration timestamp
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId]) // Index for efficient lookups by userId
+  @@index([userId]) //* Index for efficient lookups by userId
 }
 
 model VerificationToken {
-  id         String   @id @default(uuid()) // Unique verification token ID
-  identifier String // Identifier for email verification
-  token      String   @unique // Verification token
-  expires    DateTime // Expiration timestamp for the token
+  id         String   @id @default(uuid()) //* Unique verification token ID
+  identifier String //* Identifier for email verification
+  token      String   @unique //* Verification token
+  expires    DateTime //* Expiration timestamp for the token
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Password {
-  id                String            @id @default(uuid()) // Auto-incremented password ID
-  userId            String            @map("user_id") // Foreign key linking to the User model
-  siteName          String            @db.VarChar(100) // Name of the site (e.g., "Google")
-  siteUrl           String            @db.VarChar(255) // URL of the site
-  encryptedPassword String            @map("encrypted_password") @db.VarChar(512) // AES-encrypted password
-  hashedPassword String @unique //New column for SHA-512 hash
-  iv                String            @db.VarChar(128) // Initialization vector for AES-encryption
-  authTag           String // Authentication tag for AES-encryption
-  category          PasswordCategory? // Optional: Password category (e.g., "Work", "Personal")
-  strength          PasswordStrength? // Optional: Password strength indicator
+  id                String            @id @default(uuid()) //* Auto-incremented password ID
+  userId            String            @map("user_id") //* Foreign key linking to the User model
+  siteName          String            @db.VarChar(100) //* Name of the site (e.g., "Google")
+  siteUrl           String            @db.VarChar(255) //* URL of the site
+  encryptedPassword String            @map("encrypted_password") @db.VarChar(512) //* AES-encrypted password
+  hashedPassword    String            @unique //* New column for SHA-512 hash
+  iv                String            @db.VarChar(128) //* Initialization vector for AES-encryption
+  authTag           String //* Authentication tag for AES-encryption
+  category          PasswordCategory? //* Optional: Password category (e.g., "Work", "Personal")
+  strength          PasswordStrength? //* Optional: Password strength indicator
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId]) // Index for efficient lookups by userId
-  @@index([siteName]) // Index for efficient search by siteName
+  @@index([userId]) //* Index for efficient lookups by userId
+  @@index([siteName]) //* Index for efficient search by siteName
 }
