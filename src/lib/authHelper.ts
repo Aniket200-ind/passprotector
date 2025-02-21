@@ -1,4 +1,4 @@
-//! app/lib/authHelper.ts
+//! src/lib/authHelper.ts
 
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
