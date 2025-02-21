@@ -1,7 +1,9 @@
+//! src/lib/prisma.ts
+
 import { PrismaClient } from "@prisma/client";
 
 /**
- * Global Prisma client to prevent multiple instances in development.
+ * ?Global Prisma client to prevent multiple instances in development.
  */
 
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
