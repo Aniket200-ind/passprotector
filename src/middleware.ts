@@ -1,37 +1,8 @@
-/**
- * Middleware function to handle rate limiting for incoming requests.
- *
- * @param {NextRequest} req - The incoming request object.
- * @returns {Promise<NextResponse>} - The response object, either allowing the request to proceed or indicating rate limit exceeded.
- */
 //! src/middleware.ts
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { Redis } from "@upstash/redis";
-import { Ratelimit } from "@upstash/ratelimit";
-
-/**
- * Initializes a new Redis client instance using the Upstash Redis REST URL and token
- * from the environment variables.
- *
- * @constant {Redis} redis - The Redis client instance.
- * @property {string} url - The URL for the Upstash Redis REST API, retrieved from the environment variable `UPSTASH_REDIS_REST_URL`.
- * @property {string} token - The token for authenticating with the Upstash Redis REST API, retrieved from the environment variable `UPSTASH_REDIS_REST_TOKEN`.
- */
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
-
-// Initialize rate limiter with sliding window strategy
-const ratelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(10, "60s"),
-  prefix: "upstash/ratelimit",
-  analytics: true,
-  timeout: 60000,
-});
+import { ratelimit } from "./lib/ratelimitConfig";
 
 /**
  * Middleware function to handle rate limiting for incoming requests.
