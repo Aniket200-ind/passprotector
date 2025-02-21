@@ -40,8 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Ignore IDE specific files
-.vscode/
-
 # Ignore logs directory
 logs/
