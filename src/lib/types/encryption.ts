@@ -1,4 +1,4 @@
-// lib/types/encryption.ts
+//! lib/types/encryption.ts
 
 export type EncryptedData = {
   encryptedText: string;

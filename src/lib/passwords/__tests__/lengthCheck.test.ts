@@ -1,3 +1,5 @@
+//! src/lib/passwords/__tests__/lengthCheck.test.ts
+
 import { checkLength } from "@/lib/passwords/lengthCheck";
 
 describe("checkLength", () => {
@@ -36,12 +38,12 @@ describe("checkLength", () => {
   });
 
   it("treats whitespace as characters", () => {
-    // A string of 6 spaces should score 10 (since length is 6)
+    //* A string of 6 spaces should score 10 (since length is 6)
     expect(checkLength("      ")).toBe(10);
   });
 
   it("returns 0 when an error occurs (e.g., non-string input)", () => {
-    // Force a type error by casting a non-string value.
+    //* Force a type error by casting a non-string value.
     const faultyInput: unknown = null;
     expect(checkLength(faultyInput as string)).toBe(0);
   });

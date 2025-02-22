@@ -3,7 +3,7 @@
 import { z } from "zod";
 
 /**
- * Zod schema for password generator API validation
+ * ? Zod schema for password generator API validation
  */
 export const PasswordGeneratorSchema = z.object({
   length: z.number().min(8).max(64).default(16),
@@ -15,8 +15,8 @@ export const PasswordGeneratorSchema = z.object({
 });
 
 /**
- * Validation schema for the passphrase generator API.
- * Ensures user input adheres to latest security recommendations and standards.
+ * ? Validation schema for the passphrase generator API.
+ * ? Ensures user input adheres to latest security recommendations and standards.
  */
 export const PassphraseGeneratorSchema = z.object({
   wordCount: z
