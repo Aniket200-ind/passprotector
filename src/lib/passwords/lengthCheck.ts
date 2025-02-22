@@ -1,5 +1,7 @@
+//! src/lib/passwords/lengthCheck.ts
+
 /**
- * Checks the length of the password and assigns a score.
+ *? Checks the length of the password and assigns a score.
  * @param password - The password to check.
  * @returns {number} Length-based score.
  */

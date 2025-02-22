@@ -1,9 +1,11 @@
+//! src/lib/passwords/encryption.ts
+
 import crypto from "crypto";
 import { EncryptedData } from "../types";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Validate and prepare the key
+//* Validate and prepare the key
 const SECRET_KEY = process.env.AES_SECRET_KEY;
 if (!SECRET_KEY) throw new Error("Missing AES_SECRET_KEY.");
 
@@ -16,7 +18,7 @@ try {
 }
 
 /**
- * Encrypts a given plaintext using AES-256-GCM
+ *? Encrypts a given plaintext using AES-256-GCM
  * @param plaintext - The data to be encrypted
  * @returns An object containing the encrypted data, IV, and the authentication tag.
  */
@@ -36,7 +38,7 @@ export const encryptAESGCM = (plaintext: string): EncryptedData => {
 };
 
 /**
- * Decrypts a given encrypted text using AES-256-GCM
+ *? Decrypts a given encrypted text using AES-256-GCM
  *
  * @param {Object} data - The encrypted data object.
  * @param {string} data.encryptedText - The encrypted text in base64 format.

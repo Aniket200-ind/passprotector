@@ -1,10 +1,12 @@
+//! src/lib/passwords/strength.ts
+
 import { checkLength } from "@/lib/passwords/lengthCheck";
 import { isCommonPassword } from "./commonPatterns";
 import { SCORE_THRESHOLD, StrengthRating } from "./strengthCriteria";
 import { calculateEntropy } from "./entropyCheck";
 
 /**
- * Evaluates the overall strength of a password based on various checks.
+ *? Evaluates the overall strength of a password based on various checks.
  * @param {string} password - The password string to evaluate.
  * @return {Object} - An object containing the final strength rating and score.
  */
@@ -55,14 +57,3 @@ export const evaluatePasswordStrength = (
     return { rating: StrengthRating.VULNERABLE, score: 0 };
   }
 };
-
-// TODO: Test the following console logs
-
-// console.log(isCommonPassword("password")); // Should log warning and return true
-// console.log(isCommonPassword("123456")); // Should log warning and return true
-// console.log(isCommonPassword("uniqueP@ss!")); // Should return false
-// console.log(isCommonPassword("")); // Should log error and return false
-// console.log(isCommonPassword(12345 as unknown as string)); // Should log error and return false
-
-// TODO: Write new test cases for each file using copilot and run tests
-// TODO: implement API for the strength analysis feature

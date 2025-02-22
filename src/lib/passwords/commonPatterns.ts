@@ -1,14 +1,15 @@
+//! src/lib/passwords/commonPatterns.ts
+
 import commonPasswordsData from "./common-passwords.json";
 
 /**
- * Load the commmon passwords from the JSON file into memory (only once)
+ *? Load the common passwords from the JSON file into memory (only once)
  */
 
 const commonPasswords = new Set(commonPasswordsData);
 
-
 /**
- * Checks if the given password is in the common passwords list.
+ *? Checks if the given password is in the common passwords list.
  * @param {string} password - The password to check.
  * @returns {boolean} `true` if the password is common, otherwise `false`.
  */
