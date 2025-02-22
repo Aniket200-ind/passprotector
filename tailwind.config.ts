@@ -1,6 +1,7 @@
 import tailwindcssAnimate from "tailwindcss-animate";
+import type { Config } from "tailwindcss";
 
-export default {
+const config: Config = {
   darkMode: ["class"], // Enable dark mode via CSS class
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,6 +10,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        primary: ["var(--font-inter)", "Inter", "sans-serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
+        fancy: ["var(--font-fancy)", "Montserrat", "sans-serif"],
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -29,3 +35,5 @@ export default {
   },
   plugins: [tailwindcssAnimate],
 };
+
+export default config;
