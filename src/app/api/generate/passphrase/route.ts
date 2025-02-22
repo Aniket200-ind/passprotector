@@ -1,4 +1,4 @@
-//! api/generate/passphrase/route.ts
+//! src/app/api/generate/passphrase/route.ts
 
 import { generatePassphrase } from "@/lib/passwords/generator";
 import { PassphraseGeneratorSchema } from "@/lib/validation/generatorSchema";
@@ -12,13 +12,13 @@ import logger from "@/lib/logger";
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    const startTime = Date.now(); // Start time for measuring request duration
+    const startTime = Date.now(); //* Start time for measuring request duration
 
-    // Parse request body
+    //* Parse request body
     const body = await req.json();
     const parsedData = PassphraseGeneratorSchema.safeParse(body);
 
-    // Validate request body
+    //* Validate request body
     if (!parsedData.success) {
       const res = NextResponse.json(
         {
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const { wordCount, includeNumbers, includeSymbols, separator } =
       parsedData.data;
 
-    // Validate word count
+    //* Validate word count
     if (wordCount < 6 || wordCount > 8) {
       const res = NextResponse.json(
         {
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return await applySecurityHeaders(res);
     }
 
-    // Generate passphrase
+    //* Generate passphrase
     const passphrase = await generatePassphrase(
       wordCount,
       includeNumbers,
@@ -55,17 +55,23 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
 
     // **Return final response**
-    const res = NextResponse.json({ success: true, passphrase }, { status: 200 });
+    const res = NextResponse.json(
+      { success: true, passphrase },
+      { status: 200 }
+    );
 
-    // Log request
+    //* Log request
     logger.info({
       timestamp: new Date().toISOString(),
       method: req.method,
       route: "/api/generate/passphrase",
-      ip: req.headers.get("x-real-ip") || req.headers.get("x-forwaded-for")?.split(",")[0] || "unknown",
+      ip:
+        req.headers.get("x-real-ip") ||
+        req.headers.get("x-forwaded-for")?.split(",")[0] ||
+        "unknown",
       status: 200,
       responseTime: `${Date.now() - startTime}ms`,
-    })
+    });
 
     return await applySecurityHeaders(res);
   } catch (error) {
