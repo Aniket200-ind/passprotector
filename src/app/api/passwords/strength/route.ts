@@ -1,4 +1,4 @@
-//! app/api/passwords/strength/route.ts
+//! src/app/api/passwords/strength/route.ts
 
 import { evaluatePasswordStrength } from "@/lib/passwords/strength";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,63 +8,62 @@ import { RatelimitResponse } from "@/lib/types/ratelimit";
 import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
 import logger from "@/lib/logger";
 
-// Initialize the Upstash redis client
+//* Initialize the Upstash redis client
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
-// Rate limit setup (20 requests per minute per IP)
+//* Rate limit setup (20 requests per minute per IP)
 const ratelimit = new Ratelimit({
   redis,
   limiter: Ratelimit.slidingWindow(20, "60s"),
   prefix: "upstash/ratelimit",
   analytics: true,
   timeout: 60000,
-})
+});
 
 /**
- * API route to analyze password strength.
- *  - Receives a password string from the request body.
- *  - Evaluates it's strength using predefined security checks.
- *  - Returns the strength rating and relevant feedback.
+ *? API route to analyze password strength.
+ **  - Receives a password string from the request body.
+ **  - Evaluates it's strength using predefined security checks.
+ **  - Returns the strength rating and relevant feedback.
  *
  * @param {NextRequest} req - The incoming request object.
  * @returns {Promise<NextResponse>} - The response object with password strength details.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    const startTime = Date.now(); // Start time for measuring request duration
+    const startTime = Date.now(); //* Start time for measuring request duration
 
     // **Rate limit check**
-
-    // Extract IP address from request headers
+    //* Extract IP address from request headers
     const ip =
       req.headers.get("x-real-ip") ||
       req.headers.get("x-forwarded-for")?.split(",")[0] ||
       "unknown";
 
-      // Apply rate limiting
-      const { success, limit, remaining, reset }: RatelimitResponse = await ratelimit.limit(ip);
+    //* Apply rate limiting
+    const { success, limit, remaining, reset }: RatelimitResponse =
+      await ratelimit.limit(ip);
 
-      const date = new Date(reset);
-      const timeUntilReset = Math.floor((date.getTime() - Date.now()) / 1000);
+    const date = new Date(reset);
+    const timeUntilReset = Math.floor((date.getTime() - Date.now()) / 1000);
 
-      // Log rate limit status
-      logger.info("Rate limiter executed in /api/passwords/strength");
-      logger.info(
-        `Max requests: ${limit.toString()}, Remaining: ${remaining.toString()}, Reset: ${timeUntilReset.toString()} seconds`
+    //* Log rate limit status
+    logger.info("Rate limiter executed in /api/passwords/strength");
+    logger.info(
+      `Max requests: ${limit.toString()}, Remaining: ${remaining.toString()}, Reset: ${timeUntilReset.toString()} seconds`
+    );
+
+    //* If the request is over the limit, return a 429 status code
+    if (!success) {
+      const res = NextResponse.json(
+        { message: "Rate limit exceeded. Try again later" },
+        { status: 429 }
       );
-
-      // If the request is over the limit, return a 429 status code
-      if (!success) {
-        const res = NextResponse.json(
-          { message: "Rate limit exceeded. Try again later" },
-          { status: 429 }
-        );
-        return await applySecurityHeaders(res);
-      }
-
+      return await applySecurityHeaders(res);
+    }
 
     // **Extract password from request body**
     const { password } = await req.json();
@@ -99,14 +98,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       }
     );
 
-      logger.info({
-        timeStamp: new Date().toISOString(),
-        method: req.method,
-        route: "/api/passwords/strength",
-        ip,
-        status: 200,
-        executionTime: `${Date.now() - startTime}ms`,
-      })
+    logger.info({
+      timeStamp: new Date().toISOString(),
+      method: req.method,
+      route: "/api/passwords/strength",
+      ip,
+      status: 200,
+      executionTime: `${Date.now() - startTime}ms`,
+    });
 
     return await applySecurityHeaders(res);
   } catch (error) {
