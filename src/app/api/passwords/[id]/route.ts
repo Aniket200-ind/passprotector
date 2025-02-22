@@ -1,4 +1,4 @@
-//! app/api/passwords/[id]/route.ts
+//! src/app/api/passwords/[id]/route.ts
 
 import { requireAuth } from "@/lib/authHelper";
 import logger from "@/lib/logger";
@@ -9,7 +9,7 @@ import { PasswordUpdateSchema } from "@/lib/validation";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * API route to fetch a specific password by ID.
+ *? API route to fetch a specific password by ID.
  * @param {Object} params - Route parameters (including password ID).
  * @returns {Promise<NextResponse>} - The response object.
  */
@@ -18,15 +18,15 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const startTime = Date.now(); // Start time for measuring request duration
+    const startTime = Date.now(); //* Start time for measuring request duration
 
-    // Use the helper function to check for authentication status
+    //* Use the helper function to check for authentication status
     const authResult = await requireAuth();
-    if (authResult instanceof NextResponse) return authResult; // Return the response if not authenticated
+    if (authResult instanceof NextResponse) return authResult; //* Return the response if not authenticated
 
     const session = authResult;
 
-    // Extract the password ID from route parameters
+    //* Extract the password ID from route parameters
     const passwordId = (await params).id;
     if (!passwordId) {
       return NextResponse.json(
@@ -35,7 +35,7 @@ export async function GET(
       );
     }
 
-    // Ensure the password belongs to the authenticated user
+    //* Ensure the password belongs to the authenticated user
     const userEmail = session.user?.email;
     if (!userEmail) {
       return NextResponse.json(
@@ -46,7 +46,7 @@ export async function GET(
     const password = await prisma.password.findUnique({
       where: {
         id: passwordId,
-        user: { email: userEmail }, // Ensures only the owner's password is retrieved
+        user: { email: userEmail }, //* Ensures only the owner's password is retrieved
       },
       select: {
         id: true,
@@ -61,7 +61,7 @@ export async function GET(
       },
     });
 
-    // Check if password exists
+    //* Check if password exists
     if (!password) {
       return NextResponse.json(
         { success: false, message: "Password not found or unauthorized" },
@@ -69,14 +69,14 @@ export async function GET(
       );
     }
 
-    // Decrypt the password
+    //* Decrypt the password
     const decryptedPassword = decryptAESGCM({
       encryptedText: password.encryptedPassword,
       iv: password.iv,
       authTag: password.authTag,
     });
 
-    // Log the request details
+    //* Log the request details
     logger.info({
       timeStamp: new Date().toISOString(),
       method: req.method,
@@ -90,7 +90,7 @@ export async function GET(
       executionTime: `${Date.now() - startTime}ms`,
     });
 
-    // Return the decrypted password along with other details
+    //* Return the decrypted password along with other details
     return NextResponse.json(
       {
         success: true,
@@ -116,10 +116,10 @@ export async function GET(
 }
 
 /**
- * API route to update one or more fields of a password.
- * - Ensures new password is not a duplicate
- * - Encrypts the new password before storing
- * - Updates the password in the database
+ *? API route to update one or more fields of a password.
+ ** - Ensures new password is not a duplicate
+ ** - Encrypts the new password before storing
+ ** - Updates the password in the database
  *
  * @param {Object} params - Route parameters (including password ID).
  * @returns {Promise<NextResponse>} - The response object.
@@ -129,11 +129,11 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const startTime = Date.now(); // Start time for measuring request duration
+    const startTime = Date.now(); //* Start time for measuring request duration
 
-    // Authenticate user
+    //* Authenticate user
     const authResult = await requireAuth();
-    if (authResult instanceof NextResponse) return authResult; // Return if not authenticated
+    if (authResult instanceof NextResponse) return authResult; //* Return if not authenticated
 
     const session = authResult;
     const sessionUserId = session.user?.id;
@@ -145,7 +145,7 @@ export async function PATCH(
       );
     }
 
-    // Extract password ID from params
+    //* Extract password ID from params
     const passwordId = (await params).id;
     if (!passwordId) {
       return NextResponse.json(
@@ -154,10 +154,10 @@ export async function PATCH(
       );
     }
 
-    // Find the password directly with its userId (reducing unnecessary queries)
+    //* Find the password directly with its userId (reducing unnecessary queries)
     const existingPassword = await prisma.password.findUnique({
       where: { id: passwordId },
-      select: { userId: true, hashedPassword: true }, // Only fetch necessary fields
+      select: { userId: true, hashedPassword: true }, //* Only fetch necessary fields
     });
 
     if (!existingPassword || existingPassword.userId !== sessionUserId) {
@@ -167,7 +167,7 @@ export async function PATCH(
       );
     }
 
-    // Parse and validate request body
+    //* Parse and validate request body
     const body = await req.json();
     const parsedData = PasswordUpdateSchema.safeParse(body);
     if (!parsedData.success) {
@@ -190,14 +190,14 @@ export async function PATCH(
 
     let updatedData = { ...parsedData.data };
 
-    // If a new password is provided, check for duplicates and encrypt
+    //* If a new password is provided, check for duplicates and encrypt
     if (parsedData.data.password) {
       const hashedPassword = await hashPassword(parsedData.data.password);
 
-      // Check if the new password (hashed) already exists for this user
+      //* Check if the new password (hashed) already exists for this user
       const duplicatePassword = await prisma.password.findFirst({
         where: { userId: sessionUserId, hashedPassword },
-        select: { id: true }, // Only fetch ID to minimize data transfer
+        select: { id: true }, //* Only fetch ID to minimize data transfer
       });
 
       if (duplicatePassword) {
@@ -207,13 +207,17 @@ export async function PATCH(
         );
       }
 
-      // Encrypt the new password
+      //* Encrypt the new password
       const { encryptedText, iv, authTag } = encryptAESGCM(
         parsedData.data.password
       );
 
-      // Prepare update data
+      //* Prepare update data
       const { password, ...safeData } = parsedData.data;
+      //* Use the password variable to avoid unused variable warning
+      if (password) {
+        //* Do nothing, just to use the variable
+      }
       updatedData = {
         ...safeData,
         encryptedPassword: encryptedText,
@@ -223,12 +227,12 @@ export async function PATCH(
       };
     }
 
-    // Remove undefined values early
+    //* Remove undefined values early
     const filteredData = Object.fromEntries(
       Object.entries(updatedData).filter(([, v]) => v !== undefined)
     );
 
-    // Update password in database
+    //* Update password in database
     const updatedPassword = await prisma.password.update({
       where: { id: passwordId },
       data: filteredData,
@@ -236,19 +240,18 @@ export async function PATCH(
 
     let decryptedPassword: string | null = null;
 
-try {
-  decryptedPassword = decryptAESGCM({
-    iv: updatedPassword.iv,
-    authTag: updatedPassword.authTag,
-    encryptedText: updatedPassword.encryptedPassword,
-  });
-} catch (error) {
-  logger.error("Decryption failed in PATCH /api/passwords/[id]:", error);
-  decryptedPassword = null; // Set null to avoid exposing corrupted data
-}
+    try {
+      decryptedPassword = decryptAESGCM({
+        iv: updatedPassword.iv,
+        authTag: updatedPassword.authTag,
+        encryptedText: updatedPassword.encryptedPassword,
+      });
+    } catch (error) {
+      logger.error("Decryption failed in PATCH /api/passwords/[id]:", error);
+      decryptedPassword = null; //* Set null to avoid exposing corrupted data
+    }
 
-
-    // Log the request details
+    //* Log the request details
     logger.info({
       timeStamp: new Date().toISOString(),
       method: req.method,
@@ -291,7 +294,7 @@ try {
 }
 
 /**
- * API route to delete a password by ID.
+ *? API route to delete a password by ID.
  * @param {Object} params - Route parameters (including password ID).
  * @returns {Promise<NextResponse>} - The response object.
  */
@@ -300,9 +303,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const startTime = Date.now(); // Start request time
+    const startTime = Date.now(); //* Start request time
 
-    // Authenticate user
+    //* Authenticate user
     const authResult = await requireAuth();
     if (authResult instanceof NextResponse) return authResult;
 
@@ -316,7 +319,7 @@ export async function DELETE(
       );
     }
 
-    // Extract password ID from params
+    //* Extract password ID from params
     const passwordId = (await params).id;
     if (!passwordId) {
       return NextResponse.json(
@@ -325,7 +328,7 @@ export async function DELETE(
       );
     }
 
-    // Check if password exists and belongs to user
+    //* Check if password exists and belongs to user
     const passwordExists = await prisma.password.count({
       where: { id: passwordId, userId },
     });
@@ -337,15 +340,18 @@ export async function DELETE(
       );
     }
 
-    // Delete the password
+    //* Delete the password
     await prisma.password.delete({ where: { id: passwordId } });
 
-    // Log request
+    //* Log request
     logger.info({
       timeStamp: new Date().toISOString(),
       method: req.method,
       route: "/api/passwords/[id]",
-      ip: req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown",
+      ip:
+        req.headers.get("x-real-ip") ||
+        req.headers.get("x-forwarded-for") ||
+        "unknown",
       status: 200,
       userId,
       executionTime: `${Date.now() - startTime}ms`,
