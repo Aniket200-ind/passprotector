@@ -16,6 +16,9 @@ const config: Config = {
         fancy: ["var(--font-fancy)", "Montserrat", "sans-serif"],
       },
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -31,6 +34,11 @@ const config: Config = {
           foreground: 'hsl(var(--primary-foreground))'
         },
       },
+      borderRadius: {
+        lg: `var(--radius)`,
+        md: `calc(var(--radius) - 2px)`,
+        sm: `calc(var(--radius) - 4px)`,
+      }
     },
   },
   plugins: [tailwindcssAnimate],
