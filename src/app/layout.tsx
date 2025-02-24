@@ -7,10 +7,21 @@ import { SessionProvider } from "next-auth/react";
 import ThemeProvider from "@/components/theme-provider";
 
 //* Load fonts with subsets and CSS variables
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
-const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-fancy", display: "swap" });
-
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-fancy",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
