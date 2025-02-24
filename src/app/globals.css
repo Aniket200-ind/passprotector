@@ -95,3 +95,39 @@
 * {
   @apply transition-colors duration-300 ease-in-out;
 }
+
+/* Loading screen container */
+.loading-container {
+  @apply flex items-center justify-center h-screen w-full relative bg-black text-green-500;
+  overflow: hidden;
+}
+
+/* Binary scrolling effect */
+.binary-overlay {
+  @apply absolute top-0 left-0 w-full h-full overflow-hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.binary-scroll {
+  font-family: monospace;
+  font-size: 1.5rem;
+  opacity: 0.3;
+  white-space: nowrap;
+  animation: scrollText 1s linear infinite;
+}
+
+.binary-scroll:nth-child(even) {
+  animation-duration: 1s; /* Different speeds for variation */
+}
+
+@keyframes scrollText {
+  0% { transform: translateY(-20%); }
+  100% { transform: translateY(200%); }
+}
+
+/* Lock animation container */
+.lock-container {
+  @apply relative z-10;
+}
