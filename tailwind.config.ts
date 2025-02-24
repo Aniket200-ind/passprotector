@@ -21,6 +21,7 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        golden: "#FFD700",
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
