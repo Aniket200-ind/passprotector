@@ -1,5 +1,6 @@
 //! src/app/(authentication)/login/page.tsx
 
+import { auth } from "@/auth";
 import LoginButton from "@/components/ui/Button/LoginButton";
 import {
   Card,
@@ -11,13 +12,24 @@ import {
 } from "@/components/ui/card";
 import { LockIcon } from "lucide-react";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+
+
 
 export const metadata: Metadata = {
   title: "Login | PassProtector",
   description: "Secure your digital life with PassProtector",
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth();
+
+  if (session) {
+    redirect("/dashboard");
+    return null;
+  }
+
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-4 sm:p-8">
       <section>
