@@ -1,3 +1,5 @@
+//! src/app/loading.tsx
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,7 +25,7 @@ export default function LoadingScreen() {
     <div className="loading-container">
       {/* Binary scrolling background */}
       <div className="binary-overlay">
-        {[...Array(5)].map((_, i) => (
+        {[...Array(150)].map((_, i) => (
           <div key={i} className="binary-scroll">
             {Array(50)
               .fill(0)
@@ -39,7 +41,7 @@ export default function LoadingScreen() {
         animate={{ scale: isUnlocked ? 1.2 : 1, rotate: isUnlocked ? 20 : 0 }}
         transition={{ duration: 0.5 }}
       >
-        {isUnlocked ? <Unlock size={80} color="gold" /> : <Lock size={80} color="gold" />}
+        {isUnlocked ? <Unlock size={80} color="gold" /> : <Lock size={80} color="gold" className="animate-pulse" />}
       </motion.div>
     </div>
   );
