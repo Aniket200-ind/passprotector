@@ -24,8 +24,8 @@ export default function NotFound() {
             variant="default"
             size="lg"
             className="font-primary transition-all duration-300 ease-in-out
-                       hover:scale-105 hover:bg-golden hover:text-black
-                       hover:shadow-[0_0_15px_rgba(255,215,0,0.5)]
+                       hover:scale-105 hover:bg-red-400 hover:text-black
+                       hover:shadow-golden/50
                        focus:outline-none focus:ring-2 focus:ring-golden focus:ring-offset-2 focus:ring-offset-background mt-8"
           >
             Return to Safety 🏠
