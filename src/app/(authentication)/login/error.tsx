@@ -2,7 +2,7 @@
 
 "use client";
 
-import { Button } from "@/components/ui/Button/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -14,7 +14,9 @@ export default function LoginErrorPage() {
     <main className="flex min-h-screen items-center justify-center">
       <section className="text-center">
         <h1 className="text-2xl font-bold text-red-500">Login Error</h1>
-        <p className="text-muted-foreground">{decodeURIComponent(errorMessage)}</p>
+        <p className="text-muted-foreground">
+          {decodeURIComponent(errorMessage)}
+        </p>
         <Link href="/" passHref>
           <Button
             variant="default"
