@@ -10,8 +10,6 @@ export const { handlers, signIn, signOut, auth } = Nextauth({
   providers: [Google],
   pages: {
     signIn: "/login",
-    signOut: "/logout",
-    error: "/loginerror",
   },
   trustHost: true,
   secret: process.env.AUTH_SECRET,
