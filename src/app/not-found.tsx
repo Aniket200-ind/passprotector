@@ -1,13 +1,17 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/Button/button"
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4">
       <main className="text-center space-y-6 animate-fadeIn">
-        <h1 className="text-4xl font-bold font-fancy mb-4">404: Page Not Found</h1>
-        <p className="text-xl font-primary mb-6">Oops! The password to this page got lost in the void! 🚀</p>
+        <h1 className="text-4xl font-bold font-fancy mb-4">
+          404: Page Not Found
+        </h1>
+        <p className="text-xl font-primary mb-6">
+          Oops! The password to this page got lost in the void! 🚀
+        </p>
         <div className="relative w-64 h-64 mx-auto mb-6">
           <Image
             src="/404.gif"
@@ -33,5 +37,5 @@ export default function NotFound() {
         </Link>
       </main>
     </div>
-  )
+  );
 }
