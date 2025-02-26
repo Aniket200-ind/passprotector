@@ -7,11 +7,11 @@ import { z } from "zod";
  */
 export const PasswordGeneratorSchema = z.object({
   length: z.number().min(8).max(64).default(16),
-  includeUppercase: z.boolean().default(true),
-  includeLowercase: z.boolean().default(true),
-  includeNumbers: z.boolean().default(true),
-  includeSymbols: z.boolean().default(true),
-  excludeSimilar: z.boolean().default(false),
+  includeUppercase: z.boolean(),
+  includeLowercase: z.boolean(),
+  includeNumbers: z.boolean(),
+  includeSymbols: z.boolean(),
+  excludeSimilar: z.boolean(),
 });
 
 /**
