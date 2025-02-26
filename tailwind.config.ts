@@ -22,6 +22,10 @@ const config: Config = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         golden: "#FFD700",
+        deepPurple: "#6A0DAD",
+        cyberBlue: "#00FFFF",
+        synthwavePink: "#FF007F",
+        charcoal: "#121212",
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
