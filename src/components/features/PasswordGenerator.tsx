@@ -63,7 +63,7 @@ export function PasswordGenerator() {
       const strengthData = await strengthResponse.json();
       setStrength(strengthData);
     } catch (error) {
-        console.log(error);
+      console.log(error);
       toast.error("[ERROR] Please select at least one character type", {
         style: {
           background: "#121212",
@@ -86,9 +86,10 @@ export function PasswordGenerator() {
           color: "#00FFFF",
           border: "1px solid #6A0DAD",
         },
+        duration: 3000,
       });
     } catch (error) {
-        console.log(error);
+      console.log(error);
       toast.error("Failed to copy password", {
         style: {
           background: "#121212",
@@ -102,12 +103,12 @@ export function PasswordGenerator() {
   return (
     <Card className="w-full max-w-md mx-auto bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center text-golden drop-shadow-md">
+        <CardTitle className="text-2xl sm:text-3xl font-fancy text-center text-golden drop-shadow-md">
           Password Generator 🔐
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-      <div className="relative text-wrap overflow-x-auto max-w-full">
+        <div className="relative text-wrap overflow-x-auto max-w-full">
           <motion.div
             className={`p-4 rounded-lg relative text-wrap overflow-x-auto max-w-full font-mono text-center text-cyberBlue ${
               password
@@ -139,31 +140,69 @@ export function PasswordGenerator() {
         </div>
 
         <div className="flex items-center justify-center gap-6">
-          <Button size="icon" onClick={copyToClipboard} disabled={!password || isLoading} className="h-10 w-10 bg-synthwavePink hover:bg-red-500 shadow-md shadow-red-500/50">
+          <Button
+            size="icon"
+            onClick={copyToClipboard}
+            disabled={!password || isLoading}
+            className="h-10 w-10 bg-synthwavePink hover:bg-red-500 shadow-md shadow-red-500/50"
+          >
             <Copy className="h-5 w-5" />
           </Button>
-          <Button size="icon" onClick={generatePassword} disabled={isLoading} className="h-10 w-10 bg-deepPurple hover:bg-purple-400 shadow-md shadow-purple-500/50">
-            {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <RotateCw className="h-5 w-5" />}
+          <Button
+            size="icon"
+            onClick={generatePassword}
+            disabled={isLoading}
+            className="h-10 w-10 bg-deepPurple hover:bg-purple-400 shadow-md shadow-purple-500/50"
+          >
+            {isLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <RotateCw className="h-5 w-5" />
+            )}
           </Button>
         </div>
 
-        <StrengthMeter score={strength.score} PasswordStrength={strength.PasswordStrength} />
+        <StrengthMeter
+          score={strength.score}
+          PasswordStrength={strength.PasswordStrength}
+        />
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-cyberBlue">Password Length: {length}</label>
-            <Slider value={[length]} onValueChange={([value]) => setLength(value)} min={8} max={64} step={1} disabled={isLoading} className="password-slider" />
+            <label className="text-sm font-medium text-cyberBlue">
+              Password Length: {length}
+            </label>
+            <Slider
+              value={[length]}
+              onValueChange={([value]) => setLength(value)}
+              min={8}
+              max={64}
+              step={1}
+              disabled={isLoading}
+              className="password-slider"
+            />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-synthwavePink">Character Types</label>
+            <label className="text-sm font-medium text-synthwavePink">
+              Character Types
+            </label>
             <div className="grid gap-2">
               {Object.keys(options).map((option) => (
                 <div key={option} className="flex items-center justify-between">
                   <span className="text-sm font-medium text-cyberBlue">
-                    {option.replace("include", "Include ").replace("exclude", "Exclude ")}
+                    {option
+                      .replace("include", "Include ")
+                      .replace("exclude", "Exclude ")}
                   </span>
-                  <Switch checked={options[option as keyof typeof options]} onCheckedChange={(checked) => setOptions((prev) => ({ ...prev, [option]: checked }))} disabled={isLoading} className="bg-cyberBlue shadow-md shadow-cyberBlue/50" />
+                  <Switch
+                    checked={options[option as keyof typeof options]}
+                    onCheckedChange={(checked) =>
+                      setOptions((prev) => ({ ...prev, [option]: checked }))
+                    }
+                    disabled={isLoading}
+                    className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
+                  />
                 </div>
               ))}
             </div>
