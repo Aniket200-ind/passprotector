@@ -158,3 +158,15 @@
   outline: none;
   box-shadow: 0 0 5px #ffd700;
 }
+
+
+/** Cyberpunk glow effect  */
+@keyframes cyberpunk-glow {
+  0% { box-shadow: 0 0 4px #00FFFF; }
+  50% { box-shadow: 0 0 8px #00FFFF, 0 0 12px #FF007F; }
+  100% { box-shadow: 0 0 4px #00FFFF; }
+}
+
+.shadow-cyberpunk {
+  animation: cyberpunk-glow 1.5s infinite alternate;
+}
