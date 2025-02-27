@@ -35,11 +35,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       parsedData.data;
 
     //* Validate word count
-    if (wordCount < 6 || wordCount > 8) {
+    if (wordCount < 4 || wordCount > 12) {
       const res = NextResponse.json(
         {
           success: false,
-          message: "[ERROR] Invalid word count. Must be between 6 and 8.",
+          message: "[ERROR] Invalid word count. Must be between 4 and 12.",
         },
         { status: 400 }
       );
