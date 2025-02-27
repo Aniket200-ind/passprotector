@@ -22,10 +22,10 @@ export const PassphraseGeneratorSchema = z.object({
   wordCount: z
     .number()
     .int()
-    .min(6, { message: "Passphrase must be at least 6 words." })
-    .max(8, { message: "Passphrase must be no more than 8 words." }),
+    .min(4, { message: "Passphrase must be at least 4 words." })
+    .max(12, { message: "Passphrase must be no more than 12 words." }),
   includeNumbers: z.boolean().default(false),
   includeSymbols: z.boolean().default(false),
 
-  separator: z.enum([" ", "-", "_"]).default(" "),
+  separator: z.enum([" ", "-", "_", "."]).default(" "),
 });
