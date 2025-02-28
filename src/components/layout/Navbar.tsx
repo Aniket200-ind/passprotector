@@ -51,7 +51,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-deepPurple-900/20 bg-charcoal/80 backdrop-blur-md">
-      <div className="container flex h-16 items-center justify-between px-4">
+      <div className="container flex h-16 items-center justify-between px-3">
         {/* Logo - Left Side */}
         <Link
           href="/"
