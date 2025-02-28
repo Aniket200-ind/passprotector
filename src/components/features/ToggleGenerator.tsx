@@ -16,7 +16,7 @@ const ToggleGenerator = () => {
       onValueChange={(value) =>
         router.push(`/generate/${value}`, { scroll: false })
       }
-      className="w-full max-w-sm mb-6"
+      className="w-full max-w-sm my-8"
     >
       <TabsList className="flex justify-center bg-charcoal p-1 rounded-lg sm:justify-start">
         <TabsTrigger
