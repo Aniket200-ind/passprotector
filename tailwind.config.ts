@@ -19,10 +19,16 @@ const config: Config = {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
+        cyberpunkGlow: {
+          "0%": { boxShadow: "0 0 4px #00FFFF" },
+          "50%": { boxShadow: "0 0 8px #00FFFF, 0 0 12px #FF007F" },
+          "100%": { boxShadow: "0 0 4px #00FFFF" },
+        },
       },
       animation: {
         "fade-in-up": "fadeInUp 1.2s ease-out forwards",
         "fadeInwards": "fadeIn 0.5s ease-in-out",
+        "cyberpunk-glow": "cyberpunkGlow 1.5s infinite alternate",
       },
       fontFamily: {
         primary: ["var(--font-inter)", "Inter", "sans-serif"],
@@ -68,7 +74,6 @@ const config: Config = {
         cyberBlue: "#00FFFF",
         synthwavePink: "#FF007F",
         charcoal: "#121212",
-        cyberpunk: "#740c44"
       },
       borderRadius: {
         lg: `var(--radius)`,
