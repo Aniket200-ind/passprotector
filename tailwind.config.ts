@@ -35,11 +35,10 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        golden: "#FFD700",
-        deepPurple: "#6A0DAD",
-        cyberBlue: "#00FFFF",
-        synthwavePink: "#FF007F",
-        charcoal: "#121212",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -64,6 +63,12 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        golden: "#FFD700",
+        deepPurple: "#6A0DAD",
+        cyberBlue: "#00FFFF",
+        synthwavePink: "#FF007F",
+        charcoal: "#121212",
+        cyberpunk: "#740c44"
       },
       borderRadius: {
         lg: `var(--radius)`,
