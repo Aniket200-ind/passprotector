@@ -5,7 +5,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MenuSquare, LogOut, User, Shield } from "lucide-react";
+import { LogOut, User, Shield, MenuIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -137,8 +137,8 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
           {/* Mobile Menu Trigger */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button size="icon" className="md:hidden">
-                <MenuSquare className="h-6 w-6 text-cyberBlue" />
+              <Button size="icon" className="md:hidden bg-inherit">
+                <MenuIcon className="h-6 w-6 text-cyberBlue" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
