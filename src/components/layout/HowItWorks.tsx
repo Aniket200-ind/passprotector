@@ -73,7 +73,7 @@ export default function HowItWorks() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 px-4 md:px-8 bg-charcoal relative overflow-hidden"
+      className="py-20 px-4 md:px-8 relative overflow-hidden"
     >
       {/* Background grid effect */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#121212_1px,transparent_1px),linear-gradient(to_bottom,#121212_1px,transparent_1px)] bg-[size:24px_24px] opacity-20"></div>
