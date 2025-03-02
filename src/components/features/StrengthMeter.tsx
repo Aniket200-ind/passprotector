@@ -1,13 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { InfoIcon } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import SuggestionTooltip from "./CustomToolTip";
+
 
 interface StrengthMeterProps {
   score: number;
@@ -34,16 +29,7 @@ export function StrengthMeter({ score, PasswordStrength }: StrengthMeterProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-cyberBlue">Password Strength</span>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <InfoIcon className="h-4 w-4 text-muted-foreground hover:text-synthwavePink transition-colors" />
-              </TooltipTrigger>
-              <TooltipContent className="bg-charcoal/80 text-white backdrop-blur-md p-2 rounded-md">
-                <p>Based on length, complexity, and character variety</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <SuggestionTooltip message="Based on length, complexity, and character variety" />
         </div>
         <motion.span
           className="text-sm font-mono font-extrabold flex items-center gap-1"
