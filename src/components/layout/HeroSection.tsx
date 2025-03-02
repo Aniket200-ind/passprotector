@@ -50,7 +50,7 @@ export default function HeroSection() {
       <div className="container relative z-10 px-4 md:px-6 py-8">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
           {/* Lock icon with glow effect */}
-          <div className="lock-container mb-6">
+          <div className="lock-container my-6">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
