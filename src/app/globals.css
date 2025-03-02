@@ -170,3 +170,23 @@
 .shadow-cyberpunk {
   animation: cyberpunk-glow 1.5s infinite alternate;
 }
+
+/* Custom scrollbar styling for terminal section*/
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(26, 26, 46, 0.8); /* Dark track with slight transparency */
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #00FF00;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00FF00 0%, #00CCFF 100%); /* Gradient effect on hover */
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Green glow effect on hover */
+}
