@@ -62,7 +62,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${montserrat.variable} antialiased bg-charcoal dark`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${montserrat.variable} antialiased bg-charcoal dark font-primary`}
       >
         <SessionProvider>
           <ThemeProvider>
