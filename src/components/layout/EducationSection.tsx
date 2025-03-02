@@ -44,7 +44,7 @@ export default function WhyUseSection() {
 
   return (
     <section
-      className="w-full py-16 bg-charcoal text-white overflow-hidden"
+      className="w-full py-16 text-white overflow-hidden"
       aria-labelledby="why-use-heading"
     >
       <div className="container mx-auto px-4">
