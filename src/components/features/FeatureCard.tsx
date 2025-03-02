@@ -22,7 +22,7 @@ export function FeatureCard({ feature, index }: FeatureCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 1, delay: index * 0.15, ease: "easeOut" }}
-      className="bg-secondary backdrop-blur-sm rounded-lg p-6 border border-secondary/20 transition-all duration-300 sm:hover:shadow-lg sm:hover:shadow-cyberpunk select-none group"
+      className="bg-secondary backdrop-blur-sm rounded-lg p-6 border border-secondary/20 transition-all duration-300 sm:hover:shadow-lg sm:hover:animate-cyberpunk-glow select-none group"
     >
       <div className="flex flex-col items-center text-center">
         <div className="mb-4 p-3 rounded-full bg-charcoal group-hover:bg-cyberpunk/30 transition-all mix-blend-screen duration-300">
