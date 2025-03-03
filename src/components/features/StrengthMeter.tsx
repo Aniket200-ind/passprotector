@@ -1,3 +1,5 @@
+//! src/components/features/StrengthMeter.tsx
+
 "use client";
 
 import { motion } from "framer-motion";
