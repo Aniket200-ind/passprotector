@@ -2,6 +2,7 @@
 
 import WhyUseSection from "@/components/layout/EducationSection";
 import FeaturesShowcase from "@/components/layout/FeatureSection";
+import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/layout/HeroSection";
 import HowItWorks from "@/components/layout/HowItWorks";
 import PasswordStrengthChecker from "@/components/layout/PasswordStrengthChecker";
@@ -16,6 +17,7 @@ export default function Page() {
       <FeaturesShowcase />
       <PasswordStrengthChecker />
       <SecurityTerminal />
+      <Footer />
     </main>
   );
 }
