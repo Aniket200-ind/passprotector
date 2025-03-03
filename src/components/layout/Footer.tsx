@@ -182,10 +182,10 @@ export default function Footer() {
             </div>
             <p className="text-sm text-muted-foreground">
               Have suggestions/questions?
+            </p>
               <p className="text-cyberBlue">
                 Contact me at aniketbotre007@gmail.com
               </p>
-            </p>
           </div>
         </div>
       </div>
