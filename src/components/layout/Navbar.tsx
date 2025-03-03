@@ -56,6 +56,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
         <Link
           href="/"
           className="flex items-center gap-2 font-montserrat text-xl font-bold text-cyberBlue transition-colors hover:text-cyberBlue"
+          prefetch={false}
         >
           <Shield className="h-6 w-6 text-synthwavePink" />
           <span className="bg-gradient-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent">
@@ -70,6 +71,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  prefetch={true}
                   className={cn(
                     "relative font-medium text-gray-300 transition-colors hover:text-cyberBlue",
                     pathname === link.href &&
