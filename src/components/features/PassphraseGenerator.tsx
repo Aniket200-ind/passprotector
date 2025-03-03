@@ -153,20 +153,20 @@ export function PassphraseGenerator() {
             size="icon"
             onClick={copyToClipboard}
             disabled={!passphrase || isLoading}
-            className="h-10 w-10 bg-synthwavePink hover:bg-red-500 shadow-md shadow-red-500/50"
+            className="h-10 w-10 bg-rose-600 hover:bg-synthwavePink shadow-md shadow-red-500/50"
           >
-            <Copy className="h-5 w-5" />
+            <Copy className="h-5 w-5 text-white" />
           </Button>
           <Button
             size="icon"
             onClick={generatePassphrase}
             disabled={isLoading}
-            className="h-10 w-10 bg-deepPurple hover:bg-purple-400 shadow-md shadow-purple-500/50"
+            className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50"
           >
             {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin text-white" />
             ) : (
-              <RotateCw className="h-5 w-5" />
+              <RotateCw className="h-5 w-5 text-white" />
             )}
           </Button>
         </div>
