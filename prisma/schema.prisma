@@ -20,7 +20,10 @@ enum PasswordStrength {
 enum PasswordCategory {
   Personal
   Work
+  Social
   Finance
+  Shopping
+  Other
 }
 
 model User {
