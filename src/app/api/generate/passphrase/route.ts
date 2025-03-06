@@ -1,4 +1,6 @@
 //! src/app/api/generate/passphrase/route.ts
+// At the top of src/app/api/passwords/route.ts
+export const runtime = "nodejs";
 
 import { generatePassphrase } from "@/lib/passwords/generator";
 import { PassphraseGeneratorSchema } from "@/lib/validation/generatorSchema";

@@ -1,4 +1,6 @@
 //! src/app/api/passwords/[id]/route.ts
+// At the top of src/app/api/passwords/route.ts
+export const runtime = "nodejs";
 
 import { requireAuth } from "@/lib/authHelper";
 import logger from "@/lib/logger";
