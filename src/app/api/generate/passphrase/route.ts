@@ -1,5 +1,8 @@
 //! src/app/api/generate/passphrase/route.ts
 
+// Add this at the top of each API route file
+export const runtime = "nodejs";
+
 import { generatePassphrase } from "@/lib/passwords/generator";
 import { PassphraseGeneratorSchema } from "@/lib/validation/generatorSchema";
 import { NextRequest, NextResponse } from "next/server";

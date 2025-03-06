@@ -1,5 +1,8 @@
 //! src/app/api/passwords/strength/route.ts
 
+// Add this at the top of each API route file
+export const runtime = "nodejs";
+
 import { evaluatePasswordStrength } from "@/lib/passwords/strength";
 import { NextRequest, NextResponse } from "next/server";
 import { Ratelimit } from "@upstash/ratelimit";
