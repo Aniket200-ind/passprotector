@@ -11,7 +11,6 @@ import { NextResponse } from "next/server";
 export async function applySecurityHeaders(
   response: NextResponse
 ): Promise<NextResponse> {
-  // TODO: Undo the Strict-Transport-Security header comment to enforce HTTPS for 2 years after deploying your application to production.
   response.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload"); //* Enforce HTTPS for 2 years
   response.headers.set("X-DNS-Prefetch-Control", "off"); //* Disable DNS prefetching for browsers
   response.headers.set("X-Content-Type-Options", "nosniff"); //* Prevent browsers from MIME-sniffing a response away from the declared content-type
