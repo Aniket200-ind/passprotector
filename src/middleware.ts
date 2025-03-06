@@ -55,9 +55,9 @@ export async function middleware(req: NextRequest) {
   res.headers.set("X-Frame-Options", "DENY"); //* Prevent clickjacking attacks by ensuring that a browser can't render a page in a frame
   res.headers.set("X-XSS-Protection", "1; mode=block"); //* Enable the Cross-site scripting (XSS) filter built into most browsers
   res.headers.set("Cache-Control", "no-store, max-age=0"); //* Prevent caching of sensitive data
-  res.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
-  res.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent the browser from embedding a page in a different origin
-  res.headers.set("Cross-Origin-Resource-Policy", "same-origin"); //* Prevent the browser from loading resources from a different origin
+  // res.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
+  // res.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent the browser from embedding a page in a different origin
+  // res.headers.set("Cross-Origin-Resource-Policy", "same-origin"); //* Prevent the browser from loading resources from a different origin
   res.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload"); //* Enforce the use of HTTPS for 2 years
 
   return res;
