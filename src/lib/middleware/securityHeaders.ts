@@ -22,9 +22,9 @@ export async function applySecurityHeaders(
   response.headers.set("X-Frame-Options", "DENY"); //* Prevent clickjacking attacks
   response.headers.set("X-XSS-Protection", "1; mode=block"); //* Enable XSS protection
   response.headers.set("Cache-Control", "no-store, max-age=0"); //* Prevent caching of sensitive data
-  response.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
-  response.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent embedding of a page in a different origin
-  response.headers.set("Cross-Origin-Resource-Policy", "same-origin"); //* Prevent loading resources from a different origin
+  // response.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
+  // response.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent embedding of a page in a different origin
+  // response.headers.set("Cross-Origin-Resource-Policy", "same-origin"); //* Prevent loading resources from a different origin
 
   return response;
 }
