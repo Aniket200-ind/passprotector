@@ -36,7 +36,7 @@ export default function WhyUseSection() {
       transition: {
         duration: 4,
         repeat: Number.POSITIVE_INFINITY,
-        repeatType: "reverse",
+        repeatType: "reverse" as const,
         ease: "easeInOut",
       },
     },
