@@ -58,9 +58,7 @@ export async function middleware(req: NextRequest) {
   res.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
   res.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent the browser from embedding a page in a different origin
   res.headers.set("Cross-Origin-Resource-Policy", "same-origin"); //* Prevent the browser from loading resources from a different origin
-
-  // TODO: Uncomment the following line to enforce the use of HTTPS during production
-  // res.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload"); //* Enforce the use of HTTPS
+  res.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload"); //* Enforce the use of HTTPS for 2 years
 
   return res;
 }
