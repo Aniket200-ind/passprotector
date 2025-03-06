@@ -9,6 +9,7 @@ import "@/app/globals.css"; // Ensure the global styles are loaded
 
 export default function LoadingScreen() {
   const [isUnlocked, setIsUnlocked] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
