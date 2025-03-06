@@ -1,6 +1,4 @@
 //! src/app/api/passwords/strength/route.ts
-// At the top of src/app/api/passwords/route.ts
-export const runtime = "nodejs";
 
 import { evaluatePasswordStrength } from "@/lib/passwords/strength";
 import { NextRequest, NextResponse } from "next/server";

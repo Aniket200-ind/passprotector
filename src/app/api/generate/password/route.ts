@@ -1,6 +1,4 @@
 //! src/app/api/generate/password/route.ts
-// At the top of src/app/api/passwords/route.ts
-export const runtime = "nodejs";
 
 import { generateRandomPassword } from "@/lib/passwords/generator";
 import { PasswordGeneratorSchema } from "@/lib/validation/generatorSchema";

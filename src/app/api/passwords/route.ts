@@ -1,8 +1,5 @@
 //! src/app/api/passwords/route.ts
 
-// At the top of src/app/api/passwords/route.ts
-export const runtime = "nodejs";
-
 import { NextRequest, NextResponse } from "next/server";
 import { encryptAESGCM, decryptAESGCM } from "@/lib/passwords/encryption";
 import { prisma } from "@/lib/prisma";
