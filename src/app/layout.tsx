@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     description:
       "PassProtector is a modern and secure password manager that helps you generate, store, and manage strong passwords effortlessly. Enhance your online security with encryption, passphrase generation, password generation, and real-time strength analysis.",
     type: "website",
-    // url: "https://passprotector.vercel.app", During production deployment, uncomment this line and replace the URL with the actual domain.
+    url: "https://www.passprotector.in",
     locale: "en_US",
   },
   publisher: "Aniket Botre",
