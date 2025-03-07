@@ -25,6 +25,7 @@ export async function applySecurityHeaders(
   response.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
   response.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent embedding of a page in a different origin
   response.headers.set("Cross-Origin-Resource-Policy", "same-origin"); //* Prevent loading resources from a different origin
+  response.headers.set("Access-Control-Allow-Origin", "*"); //* Allow requests from any origin
 
   return response;
 }
