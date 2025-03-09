@@ -5,12 +5,16 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useMemo } from "react";
 
 const ToggleGenerator = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const activeTab = pathname.includes("password") ? "password" : "passphrase";
+  const activeTab = useMemo(
+    () => (pathname.includes("password") ? "password" : "passphrase"),
+    [pathname]
+  );
 
   return (
     <Tabs
@@ -19,6 +23,7 @@ const ToggleGenerator = () => {
         router.push(`/generate/${value}`, { scroll: false })
       }
       className="w-full max-w-sm my-8"
+      aria-label="Toggle between password and passphrase generator"
     >
       <TabsList className="flex justify-center bg-charcoal p-1 rounded-lg sm:justify-start">
         <TabsTrigger
@@ -29,6 +34,7 @@ const ToggleGenerator = () => {
               ? "text-cyberBlue bg-deepPurple shadow-cyberpunk"
               : "text-gray-400 hover:text-cyberBlue"
           )}
+          aria-label="Generate password"
         >
           🔐 Password
         </TabsTrigger>
@@ -40,6 +46,7 @@ const ToggleGenerator = () => {
               ? "text-synthwavePink bg-deepPurple shadow-cyberpunk"
               : "text-gray-400 hover:text-synthwavePink"
           )}
+          aria-label="Generate passphrase"
         >
           🔑 Passphrase
         </TabsTrigger>
