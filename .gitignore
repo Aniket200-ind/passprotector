@@ -42,3 +42,7 @@ next-env.d.ts
 
 # Ignore logs directory
 logs/
+.vercel
+
+# Input demo data
+input_demo.js
