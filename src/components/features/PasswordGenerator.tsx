@@ -15,7 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { AnimatePresence, motion } from "framer-motion";
 import { Copy, Loader2, RotateCw } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 export function PasswordGenerator() {
@@ -100,6 +100,27 @@ export function PasswordGenerator() {
     }
   };
 
+  const optionItems = useMemo(() => {
+    return Object.keys(options).map((option) => (
+      <div key={option} className="flex items-center justify-between">
+        <label htmlFor={`option-${option}`} className="text-sm font-medium text-cyberBlue">
+          {option
+            .replace("include", "Include ")
+            .replace("exclude", "Exclude ")}
+        </label>
+        <Switch
+          id={`option-${option}`}
+          checked={options[option as keyof typeof options]}
+          onCheckedChange={(checked) =>
+            setOptions((prev) => ({ ...prev, [option]: checked }))
+          }
+          disabled={isLoading}
+          className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
+        />
+      </div>
+    ))
+  }, [options, isLoading]);
+
   return (
     <Card className="w-full max-w-md mx-auto bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
       <CardHeader>
@@ -108,7 +129,11 @@ export function PasswordGenerator() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="relative text-wrap overflow-x-auto max-w-full">
+        <div
+          className="relative text-wrap overflow-x-auto max-w-full"
+          aria-live="polite"
+          tabIndex={0}
+        >
           <motion.div
             className={`p-4 rounded-lg relative text-wrap overflow-x-auto max-w-full font-mono text-center text-cyberBlue ${
               password
@@ -145,6 +170,7 @@ export function PasswordGenerator() {
             onClick={copyToClipboard}
             disabled={!password || isLoading}
             className="h-10 w-10 bg-rose-700 hover:bg-synthwavePink shadow-md shadow-red-500/50"
+            aria-label="Copy Password to Clipboard"
           >
             <Copy className="h-5 w-5 text-white" />
           </Button>
@@ -155,9 +181,12 @@ export function PasswordGenerator() {
             className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50"
           >
             {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-white" />
+              <Loader2
+                className="h-5 w-5 animate-spin text-white"
+                aria-hidden="true"
+              />
             ) : (
-              <RotateCw className="h-5 w-5 text-white" />
+              <RotateCw className="h-5 w-5 text-white" aria-hidden="true" />
             )}
           </Button>
         </div>
@@ -169,7 +198,7 @@ export function PasswordGenerator() {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-synthwavePink">
+            <label htmlFor="length-slider" className="text-sm font-medium text-synthwavePink">
               Password Length: {length}
             </label>
             <Slider
@@ -180,31 +209,19 @@ export function PasswordGenerator() {
               step={1}
               disabled={isLoading}
               className="password-slider"
+              aria-label="Password Length"
+              aria-valuemin={8}
+              aria-valuemax={64}
+              aria-valuenow={length}
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-synthwavePink">
+            <label htmlFor="character-types" className="text-sm font-medium text-synthwavePink">
               Character Types
             </label>
             <div className="grid gap-2">
-              {Object.keys(options).map((option) => (
-                <div key={option} className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-cyberBlue">
-                    {option
-                      .replace("include", "Include ")
-                      .replace("exclude", "Exclude ")}
-                  </span>
-                  <Switch
-                    checked={options[option as keyof typeof options]}
-                    onCheckedChange={(checked) =>
-                      setOptions((prev) => ({ ...prev, [option]: checked }))
-                    }
-                    disabled={isLoading}
-                    className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
-                  />
-                </div>
-              ))}
+              {optionItems}
             </div>
           </div>
         </div>
