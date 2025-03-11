@@ -17,7 +17,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Copy, Loader2, RotateCw } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { constant } from "lodash";
 
 export function PasswordGenerator() {
   const [password, setPassword] = useState("");
