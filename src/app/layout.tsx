@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import ThemeProvider from "@/components/theme-provider";
 import { auth } from "@/auth";
 import { NavbarWrapper } from "@/components/layout/NavBarWrapper";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 //* Load fonts with subsets and CSS variables
 const inter = Inter({
@@ -72,6 +73,7 @@ export default async function RootLayout({
             </main>
           </ThemeProvider>
         </SessionProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
