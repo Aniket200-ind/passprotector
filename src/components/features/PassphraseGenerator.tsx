@@ -248,6 +248,8 @@ export function PassphraseGenerator() {
             <label
               htmlFor="word-count-slider"
               className="text-sm font-medium text-cyberBlue"
+              aria-valuetext={`${options.wordCount} words`}
+              aria-describedby="word-count-description"
             >
               Word Count: {options.wordCount}
             </label>
@@ -266,6 +268,8 @@ export function PassphraseGenerator() {
               aria-valuemin={4}
               aria-valuemax={12}
               aria-valuenow={options.wordCount}
+              aria-valuetext={`${length} characters`}
+              aria-labelledby="length-slider-label"
             />
           </div>
 
