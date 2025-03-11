@@ -35,8 +35,8 @@ export function PasswordGenerator() {
   });
 
   const handleOptionChange = useCallback((option: string, checked: boolean) => {
-    setOptions((prev) => ({ ...prev, [option]: checked }))
-  }, [])
+    setOptions((prev) => ({ ...prev, [option]: checked }));
+  }, []);
 
   const generatePassword = async () => {
     try {
@@ -103,32 +103,31 @@ export function PasswordGenerator() {
       });
     }
   };
- 
+
   /**
    ** Memoized options list
-   * 
+   *
    ** Avoids re-rendering the options list on every render
    ** Generates the list of options based on the current state of the options object
-   */ 
+   */
   const optionItems = useMemo(() => {
     return Object.keys(options).map((option) => (
       <div key={option} className="flex items-center justify-between">
-        <label htmlFor={`option-${option}`} className="text-sm font-medium text-cyberBlue">
-          {option
-            .replace("include", "Include ")
-            .replace("exclude", "Exclude ")}
+        <label
+          htmlFor={`option-${option}`}
+          className="text-sm font-medium text-cyberBlue"
+        >
+          {option.replace("include", "Include ").replace("exclude", "Exclude ")}
         </label>
         <Switch
           id={`option-${option}`}
           checked={options[option as keyof typeof options]}
-          onCheckedChange={(checked) =>
-            handleOptionChange(option, checked)
-          }
+          onCheckedChange={(checked) => handleOptionChange(option, checked)}
           disabled={isLoading}
           className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
         />
       </div>
-    ))
+    ));
   }, [options, isLoading, handleOptionChange]);
 
   return (
@@ -189,6 +188,7 @@ export function PasswordGenerator() {
             onClick={generatePassword}
             disabled={isLoading}
             className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50"
+            aria-label="Generate Password"
           >
             {isLoading ? (
               <Loader2
@@ -208,7 +208,10 @@ export function PasswordGenerator() {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="length-slider" className="text-sm font-medium text-synthwavePink">
+            <label
+              htmlFor="length-slider"
+              className="text-sm font-medium text-synthwavePink"
+            >
               Password Length: {length}
             </label>
             <Slider
@@ -223,14 +226,24 @@ export function PasswordGenerator() {
               aria-valuemin={8}
               aria-valuemax={64}
               aria-valuenow={length}
+              id="length-slider"
+              aria-valuetext={`${length} characters`}
+              aria-labelledby="length-slider-label"
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="character-types" className="text-sm font-medium text-synthwavePink">
+            <label
+              htmlFor="character-types"
+              className="text-sm font-medium text-synthwavePink"
+            >
               Character Types
             </label>
-            <div className="grid gap-2">
+            <div
+              className="grid gap-2"
+              id="character-types"
+              aria-labelledby="character-types"
+            >
               {optionItems}
             </div>
           </div>
