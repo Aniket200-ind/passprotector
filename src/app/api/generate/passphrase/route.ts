@@ -3,7 +3,7 @@
 import { generatePassphrase } from "@/lib/passwords/generator";
 import { PassphraseGeneratorSchema } from "@/lib/validation/generatorSchema";
 import { NextRequest, NextResponse } from "next/server";
-// import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
+import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
 import logger from "@/lib/logger";
 
 /**
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         },
         { status: 400 }
       );
-      return res;
+      return await applySecurityHeaders(res);
     }
 
     const { wordCount, includeNumbers, includeSymbols, separator } =
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         },
         { status: 400 }
       );
-      return res;
+      return await applySecurityHeaders(res);
     }
 
     //* Generate passphrase
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       responseTime: `${Date.now() - startTime}ms`,
     });
 
-    return res;
+    return await applySecurityHeaders(res);
   } catch (error) {
     logger.error("[ERROR] Failed to generate passphrase: ", error);
 
@@ -81,6 +81,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { succes: false, message: "Internal Server Error" },
       { status: 500 }
     );
-    return res;
+    return await applySecurityHeaders(res);
   }
 }
