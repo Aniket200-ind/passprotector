@@ -15,8 +15,9 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { AnimatePresence, motion } from "framer-motion";
 import { Copy, Loader2, RotateCw } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { constant } from "lodash";
 
 export function PasswordGenerator() {
   const [password, setPassword] = useState("");
@@ -33,6 +34,10 @@ export function PasswordGenerator() {
     score: 0,
     PasswordStrength: "",
   });
+
+  const handleOptionChange = useCallback((option: string, checked: boolean) => {
+    setOptions((prev) => ({ ...prev, [option]: checked }))
+  }, [])
 
   const generatePassword = async () => {
     try {
@@ -99,7 +104,13 @@ export function PasswordGenerator() {
       });
     }
   };
-
+ 
+  /**
+   ** Memoized options list
+   * 
+   ** Avoids re-rendering the options list on every render
+   ** Generates the list of options based on the current state of the options object
+   */ 
   const optionItems = useMemo(() => {
     return Object.keys(options).map((option) => (
       <div key={option} className="flex items-center justify-between">
@@ -112,14 +123,14 @@ export function PasswordGenerator() {
           id={`option-${option}`}
           checked={options[option as keyof typeof options]}
           onCheckedChange={(checked) =>
-            setOptions((prev) => ({ ...prev, [option]: checked }))
+            handleOptionChange(option, checked)
           }
           disabled={isLoading}
           className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
         />
       </div>
     ))
-  }, [options, isLoading]);
+  }, [options, isLoading, handleOptionChange]);
 
   return (
     <Card className="w-full max-w-md mx-auto bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
