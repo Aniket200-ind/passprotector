@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast, Toaster } from "react-hot-toast";
 import { Slider } from "@/components/ui/slider";
@@ -46,7 +46,22 @@ export function PassphraseGenerator() {
     PasswordStrength: "",
   });
 
-  const generatePassphrase = async () => {
+  const handleOptionChange = useCallback((option: string, checked: boolean) => {
+    setOptions((prev) => ({ ...prev, [option]: checked }));
+  }, []);
+
+  //* Memoize the separator options
+  const separatorOptions = useMemo(
+    () => [
+      { value: " ", label: "(Space)" },
+      { value: "-", label: "- (Hyphen)" },
+      { value: "_", label: "_ (Underscore)" },
+      { value: ".", label: ". (Period)" },
+    ],
+    []
+  );
+
+  const generatePassphrase = useCallback(async () => {
     try {
       setIsLoading(true);
 
@@ -83,7 +98,7 @@ export function PassphraseGenerator() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [options]);
 
   const copyToClipboard = async () => {
     if (!passphrase) return;
@@ -109,6 +124,48 @@ export function PassphraseGenerator() {
     }
   };
 
+  //* Memoize the toggle options for the passphrase generator
+  const toggleOptions = useMemo(() => {
+    return (
+      <div className="grid gap-2">
+        <div className="flex items-center justify-between">
+          <label
+            htmlFor="include-numbers"
+            className="text-sm font-medium text-cyberBlue"
+          >
+            Include Numbers
+          </label>
+          <Switch
+            id="include-numbers"
+            checked={options.includeNumbers}
+            onCheckedChange={(checked) =>
+              handleOptionChange("includeNumbers", checked)
+            }
+            disabled={isLoading}
+            className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <label
+            htmlFor="include-symbols"
+            className="text-sm font-medium text-cyberBlue"
+          >
+            Include Symbols
+          </label>
+          <Switch
+            id="include-symbols"
+            checked={options.includeSymbols}
+            onCheckedChange={(checked) =>
+              handleOptionChange("includeSymbols", checked)
+            }
+            disabled={isLoading}
+            className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
+          />
+        </div>
+      </div>
+    );
+  }, [options, isLoading, handleOptionChange]);
+
   return (
     <Card className="w-full max-w-md mx-auto bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
       <CardHeader>
@@ -117,7 +174,12 @@ export function PassphraseGenerator() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="relative">
+        <div
+          className="relative"
+          aria-live="polite"
+          tabIndex={0}
+          aria-label="Generated Passphrase"
+        >
           <motion.div
             className={`p-4 rounded-lg font-mono text-center text-cyberBlue break-all ${
               passphrase
@@ -154,6 +216,7 @@ export function PassphraseGenerator() {
             onClick={copyToClipboard}
             disabled={!passphrase || isLoading}
             className="h-10 w-10 bg-rose-600 hover:bg-synthwavePink shadow-md shadow-red-500/50"
+            aria-label="Copy Passphrase to Clipboard"
           >
             <Copy className="h-5 w-5 text-white" />
           </Button>
@@ -162,11 +225,15 @@ export function PassphraseGenerator() {
             onClick={generatePassphrase}
             disabled={isLoading}
             className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50"
+            aria-label="Generate new Passphrase"
           >
             {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-white" />
+              <Loader2
+                className="h-5 w-5 animate-spin text-white"
+                aria-hidden="true"
+              />
             ) : (
-              <RotateCw className="h-5 w-5 text-white" />
+              <RotateCw className="h-5 w-5 text-white" aria-hidden="true" />
             )}
           </Button>
         </div>
@@ -178,10 +245,14 @@ export function PassphraseGenerator() {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-cyberBlue">
+            <label
+              htmlFor="word-count-slider"
+              className="text-sm font-medium text-cyberBlue"
+            >
               Word Count: {options.wordCount}
             </label>
             <Slider
+              id="word-count-slider"
               value={[options.wordCount]}
               onValueChange={([value]) =>
                 setOptions((prev) => ({ ...prev, wordCount: value }))
@@ -191,11 +262,18 @@ export function PassphraseGenerator() {
               step={1}
               className="password-slider"
               disabled={isLoading}
+              aria-label="Word Count"
+              aria-valuemin={4}
+              aria-valuemax={12}
+              aria-valuenow={options.wordCount}
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-synthwavePink">
+            <label
+              htmlFor="separator-select"
+              className="text-sm font-medium text-synthwavePink"
+            >
               Separator
             </label>
             <Select
@@ -205,47 +283,24 @@ export function PassphraseGenerator() {
               }
               disabled={isLoading}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger
+                className="w-full"
+                id="separator-select"
+                aria-label="Select word separator"
+              >
                 <SelectValue placeholder="Select a separator" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value=" "> (Space)</SelectItem>
-                <SelectItem value="-"> - (Hyphen)</SelectItem>
-                <SelectItem value="_"> _ (Underscore)</SelectItem>
-                <SelectItem value="."> . (Dot)</SelectItem>
+                {separatorOptions.map(({ value, label }) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
-          <div className="flex items-center justify-between">
-            <label htmlFor="includeNumbers" className="text-sm font-medium">
-              Include Numbers
-            </label>
-            <Switch
-              id="includeNumbers"
-              checked={options.includeNumbers}
-              onCheckedChange={(checked) =>
-                setOptions((prev) => ({ ...prev, includeNumbers: checked }))
-              }
-              disabled={isLoading}
-              className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <label htmlFor="includeSymbols" className="text-sm font-medium">
-              Include Symbols
-            </label>
-            <Switch
-              id="includeSymbols"
-              checked={options.includeSymbols}
-              onCheckedChange={(checked) =>
-                setOptions((prev) => ({ ...prev, includeSymbols: checked }))
-              }
-              disabled={isLoading}
-              className="bg-cyberBlue shadow-md shadow-cyberBlue/50"
-            />
-          </div>
+          {toggleOptions}
         </div>
       </CardContent>
       <CardFooter>
