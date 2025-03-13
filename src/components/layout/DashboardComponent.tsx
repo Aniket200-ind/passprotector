@@ -123,9 +123,14 @@ export default function DashboardComponent() {
   return (
     <SidebarProvider className="mt-12">
       {/* Sidebar */}
-      <Sidebar className="border-r border-deepPurple/50 mt-16">
+      <Sidebar collapsible="icon" className="mt-16">
         <SidebarContent>
           <SidebarMenu>
+          <SidebarTrigger
+              className="flex items-center justify-center h-10 w-10 rounded-full bg-deepPurple/40 hover:bg-deepPurple/80 transition-colors mx-2 my-1"
+              aria-label="Toggle Sidebar"
+              />
+              <hr className="border border-synthwavePink w-full" />
             {navItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
@@ -133,8 +138,8 @@ export default function DashboardComponent() {
                   isActive={item.isActive}
                   tooltip={item.title}
                 >
-                  <a href={item.href} className="flex items-center">
-                    <item.icon className="mr-2 h-4 w-4" />
+                  <a href={item.href}>
+                    <item.icon className="h-5 w-5" />
                     <span>{item.title}</span>
                   </a>
                 </SidebarMenuButton>
@@ -152,10 +157,6 @@ export default function DashboardComponent() {
             <h1 className="font-fancy text-2xl font-bold">
               Dashboard Overview
             </h1>
-            <SidebarTrigger
-              className="flex items-center justify-center h-10 w-10 rounded-full bg-deepPurple/40 hover:bg-deepPurple/80 transition-colors"
-              aria-label="Toggle Sidebar"
-            />
           </div>
 
           {/* Stats Grid */}

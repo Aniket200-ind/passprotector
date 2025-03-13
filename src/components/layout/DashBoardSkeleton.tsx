@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarRail,
   SidebarInset,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   Home,
@@ -30,6 +31,11 @@ export default function DashboardSkeleton() {
       <Sidebar className="border-r border-deepPurple/20 mt-16">
         <SidebarContent>
           <SidebarMenu>
+          <SidebarTrigger
+              className="flex items-center justify-center h-10 w-10 rounded-full bg-deepPurple/40 hover:bg-deepPurple/80 transition-colors mx-2 my-1"
+              aria-label="Toggle Sidebar"
+              />
+              <hr className="border border-synthwavePink w-full" />
             <SidebarMenuItem>
               <SidebarMenuButton asChild isActive tooltip="Dashboard">
                 <div className="flex items-center">
