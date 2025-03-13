@@ -27,7 +27,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarFooter,
   SidebarRail,
   SidebarInset,
   SidebarTrigger,
@@ -143,12 +142,6 @@ export default function DashboardComponent() {
             ))}
           </SidebarMenu>
         </SidebarContent>
-        <SidebarFooter className="border-t border-deepPurple/20 p-4">
-          <div className="flex items-center justify-center">
-            <ShieldAlert className="h-5 w-5 text-synthwavePink mr-2" />
-            <span className="text-sm font-mono">Secure Mode</span>
-          </div>
-        </SidebarFooter>
         <SidebarRail />
       </Sidebar>
 
@@ -170,14 +163,24 @@ export default function DashboardComponent() {
             {/* Total Passwords Card */}
             <Card className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
+                <CardTitle 
+                className="text-sm font-medium"
+                aria-label="Total Passwords"
+                aria-describedby="total-passwords"
+                >
                   Total Passwords
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center">
                   <Lock className="h-8 w-8 text-cyberBlue mr-3" />
-                  <div className="text-3xl font-bold font-mono animate-fadeIn">
+                  <div 
+                  className="text-3xl font-bold font-mono animate-fadeIn"
+                  id="total-passwords"
+                  aria-label="Total Passwords Count"
+                  aria-live="polite"
+                  aria-description="Total number of passwords in the vault"
+                  >
                     {data?.totalPasswords || 0}
                   </div>
                 </div>
@@ -187,14 +190,23 @@ export default function DashboardComponent() {
             {/* Weak Passwords Card */}
             <Card className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
+                <CardTitle 
+                className="text-sm font-medium"
+                aria-label="Weak Passwords"
+                aria-describedby="weak-passwords"
+                >
                   Weak Passwords
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center">
                   <ShieldAlert className="h-8 w-8 text-red-500 mr-3" />
-                  <div className="text-3xl font-bold font-mono animate-fadeIn">
+                  <div 
+                  className="text-3xl font-bold font-mono animate-fadeIn"
+                  aria-label="Weak Passwords Count"
+                  aria-live="polite"
+                  aria-description="Total number of weak passwords in the vault"
+                  >
                     {data?.totalWeakPasswords || 0}
                   </div>
                 </div>
@@ -204,14 +216,23 @@ export default function DashboardComponent() {
             {/* Strong Passwords Card */}
             <Card className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
+                <CardTitle 
+                className="text-sm font-medium"
+                aria-label="Strong Passwords"
+                aria-describedby="strong-passwords"
+                >
                   Strong Passwords
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center">
                   <Shield className="h-8 w-8 text-green-500 mr-3" />
-                  <div className="text-3xl font-bold font-mono animate-fadeIn">
+                  <div 
+                  className="text-3xl font-bold font-mono animate-fadeIn"
+                  aria-label="Strong Passwords Count"
+                  aria-live="polite"
+                  aria-description="Total number of strong passwords in the vault"
+                  >
                     {data?.totalStrongPasswords || 0}
                   </div>
                 </div>
@@ -221,14 +242,24 @@ export default function DashboardComponent() {
             {/* Total categories Card */}
             <Card className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
+                <CardTitle 
+                className="text-sm font-medium"
+                aria-label="Total Password Categories"
+                aria-describedby="total-categories"
+                >
                   Total Password Categories
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center">
                   <PieChart className="h-8 w-8 text-synthwavePink mr-3" />
-                  <div className="text-3xl font-bold font-mono animate-fadeIn">
+                  <div 
+                  className="text-3xl font-bold font-mono animate-fadeIn"
+                  id="total-categories"
+                  aria-label="Total Password Categories Count"
+                  aria-live="polite"
+                  aria-description="Total number of password categories in the vault"
+                  >
                     {data?.totalCategories || 0}
                   </div>
                 </div>
@@ -239,27 +270,43 @@ export default function DashboardComponent() {
           {/* Charts Grid */}
           <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
             {/* Password Categories Chart */}
-            <Card className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg">
+            <Card 
+            className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg"
+            role="region"
+            aria-labelledby="category-chart-title"
+            >
               <CardHeader>
-                <CardTitle>Password Categories</CardTitle>
-                <CardDescription>
+                <CardTitle id="category-chart-title">Password Categories</CardTitle>
+                <CardDescription id="category-chart-description">
                   Distribution of passwords by category
                 </CardDescription>
               </CardHeader>
-              <CardContent className="h-[300px] sm:h-[350px] md:h-[400px]">
+              <CardContent 
+              className="h-[300px] sm:h-[350px] md:h-[400px]"
+              aria-describedby="category-chart-description"
+              aria-live="polite"
+              >
                 <PasswordCategoryChart data={transformedCategoryData} />
               </CardContent>
             </Card>
 
             {/* Password Strength Chart */}
-            <Card className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg">
+            <Card 
+            className="border-deepPurple/60 shadow-md transition-all duration-300 hover:shadow-lg"
+            role="region"
+            aria-labelledby="strength-chart-title"
+            >
               <CardHeader>
-                <CardTitle>Password Strength</CardTitle>
-                <CardDescription>
+                <CardTitle id="strength-chart-title">Password Strength</CardTitle>
+                <CardDescription id="strength-chart-description">
                   Distribution of passwords by strength
                 </CardDescription>
               </CardHeader>
-              <CardContent className="h-[300px] sm:h-[350px] md:h-[400px]">
+              <CardContent
+               className="h-[300px] sm:h-[350px] md:h-[400px]"
+                aria-describedby="strength-chart-description"
+                aria-live="polite"
+               >
                 <PasswordStrengthChart data={transformedStrengthData} />
               </CardContent>
             </Card>

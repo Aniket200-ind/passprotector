@@ -35,7 +35,10 @@ export function PasswordCategoryChart({ data }: PasswordCategoryChartProps) {
       className="w-full h-full"
     >
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+        <PieChart 
+        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+        aria-label="Password Category Pie Chart"
+        >
           <Pie
             data={data}
             cx="50%"
@@ -49,12 +52,16 @@ export function PasswordCategoryChart({ data }: PasswordCategoryChartProps) {
             label={({ name, percent }) =>
               `${name}: ${(percent * 100).toFixed(0)}%`
             }
+            role="Password Category Pie Chart"  
+            aria-describedby="password-category-chart"
           >
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={entry.color}
                 style={{ filter: "url(#glow)" }}
+                name={entry.name}
+                aria-label={`${entry.name} category`}
               />
             ))}
           </Pie>

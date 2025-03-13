@@ -49,12 +49,14 @@ export function PasswordStrengthChart({ data }: PasswordStrengthChartProps) {
             dataKey="value"
             nameKey="name"
             label={({ name, value }) => `${name}: ${value}`}
+            role="Password Strength Pie Chart"
           >
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={entry.color}
                 style={{ filter: "url(#glow)" }}
+                name={entry.name}
               />
             ))}
           </Pie>
