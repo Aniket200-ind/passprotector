@@ -123,7 +123,7 @@ export default function DashboardComponent() {
   return (
     <SidebarProvider className="mt-12">
       {/* Sidebar */}
-      <Sidebar className="border-r border-deepPurple/20 mt-16">
+      <Sidebar className="border-r border-deepPurple/50 mt-16">
         <SidebarContent>
           <SidebarMenu>
             {navItems.map((item) => (
@@ -153,7 +153,7 @@ export default function DashboardComponent() {
               Dashboard Overview
             </h1>
             <SidebarTrigger
-              className="flex items-center justify-center h-10 w-10 rounded-full bg-deepPurple/20 hover:bg-deepPurple/30 transition-colors"
+              className="flex items-center justify-center h-10 w-10 rounded-full bg-deepPurple/40 hover:bg-deepPurple/80 transition-colors"
               aria-label="Toggle Sidebar"
             />
           </div>
