@@ -183,6 +183,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             authTag: true,
             category: true,
             strength: true,
+            createdAt: true,
           },
           orderBy: { createdAt: "desc" }, //* Ensure the latest passwords are returned first
           skip, //* Skip the first n passwords
@@ -210,6 +211,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       }),
       category: password.category,
       strength: password.strength,
+      createdAt: password.createdAt,
     }));
 
     //* Log the request
