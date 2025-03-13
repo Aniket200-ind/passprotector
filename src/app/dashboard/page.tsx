@@ -8,7 +8,13 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 import { Suspense } from "react";
+
+export const metadata:Metadata = {
+  title: "Dashboard | PassProtector",
+  description: "Dashboard to view all your passwords related stats",
+}
 
 export default async function Dashboard() {
   const queryClient = new QueryClient();
