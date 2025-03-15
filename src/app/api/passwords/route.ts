@@ -7,6 +7,7 @@ import { PasswordCreateSchema } from "@/lib/validation";
 import { hashPassword } from "@/lib/passwords/hash";
 import { requireAuth } from "@/lib/authHelper";
 import logger from "@/lib/logger";
+import { PasswordCategory, PasswordStrength } from "@prisma/client";
 
 /**
  *? API route to handle password storage
@@ -168,12 +169,53 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const pageSize = 20;
     const skip = (page - 1) * pageSize;
 
+    //* Parse sorting parameters
+    const sortField = req.nextUrl.searchParams.get("sortField") || "createdAt";
+    const sortOrder = req.nextUrl.searchParams.get("sortOrder") || "desc";
+
+    //* Get category filter from query params
+    const categoryFilter = req.nextUrl.searchParams.get("category");
+
+    //* Get strength filter from query params
+    const strengthFilter = req.nextUrl.searchParams.get("strength");
+
+
+    const whereConditions: {
+      category?: PasswordCategory;
+      strength?: PasswordStrength;
+    } = {};
+
+    // Add category filter if present
+    if (categoryFilter && categoryFilter !== "All") {
+      whereConditions.category = categoryFilter as PasswordCategory;
+    }
+
+    // Add strength filter if present
+    if (strengthFilter && strengthFilter !== "All") {
+      whereConditions.strength = strengthFilter as PasswordStrength;
+    }
+
+    //* Validate sort field to prevent SQL injections
+    const validSortFields = ["createdAt", "siteName"];
+    const validatedSortField = validSortFields.includes(sortField)
+      ? sortField
+      : "createdAt";
+
+    //* Validate sort order
+    const validatedSortOrder = sortOrder === "asc" ? "asc" : "desc";
+
+    //* Dynamic orderBy object
+    const orderBy = {
+      [validatedSortField]: validatedSortOrder,
+    };
+
     //* Find the user in the database
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
       select: {
         id: true,
         passwords: {
+          where: Object.keys(whereConditions).length > 0 ? whereConditions : {},
           select: {
             id: true,
             siteName: true,
@@ -185,7 +227,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             strength: true,
             createdAt: true,
           },
-          orderBy: { createdAt: "desc" }, //* Ensure the latest passwords are returned first
+          orderBy,
           skip, //* Skip the first n passwords
           take: pageSize, //* Limit the number of passwords returned
         },
