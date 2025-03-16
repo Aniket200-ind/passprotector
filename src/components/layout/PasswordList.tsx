@@ -495,6 +495,7 @@ export default function PasswordListComponent() {
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <div className="h-8 w-8 rounded-full bg-deepPurple/10 flex items-center justify-center overflow-hidden">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img
                                     src={
                                       getFavicon(password.siteUrl) ||
