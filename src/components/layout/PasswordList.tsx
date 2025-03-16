@@ -169,10 +169,10 @@ export default function PasswordListComponent() {
 
   // Clean up timeouts on unmount
   useEffect(() => {
+    const currentTimeouts = passwordTimeouts.current;
+
     return () => {
-      Object.values(passwordTimeouts.current).forEach((timeout) => {
-        clearTimeout(timeout)
-      })
+      Object.values(currentTimeouts).forEach(clearTimeout)
     }
   }, [])
 
