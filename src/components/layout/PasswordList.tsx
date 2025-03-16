@@ -75,17 +75,17 @@ interface Password {
 
 // Strength color mapping
 const strengthColors = {
-  Vulnerable: "text-red-500",
-  Weak: "text-orange-500",
-  Moderate: "text-yellow-500",
-  Strong: "text-green-500",
+  "Vulnerable": "text-red-500",
+  "Weak": "text-orange-500",
+  "Moderate": "text-yellow-500",
+  "Strong": "text-green-500",
 }
 
 const strengthIcons = {
-  Vulnerable: ShieldAlert,
-  Weak: ShieldAlert,
-  Moderate: Shield,
-  Strong: Shield,
+  "Vulnerable": ShieldAlert,
+  "Weak": ShieldAlert,
+  "Moderate": Shield,
+  "Strong": Shield,
 }
 
 export default function PasswordListComponent() {
@@ -561,10 +561,10 @@ export default function PasswordListComponent() {
                             <TableCell>
                               <div className="flex items-center gap-1">
                                 {(() => {
-                                  const StrengthIcon = strengthIcons[password.strength]
-                                  return <StrengthIcon className={cn("h-4 w-4", strengthColors[password.strength])} />
+                                  const StrengthIcon = strengthIcons[password.strength as keyof typeof strengthIcons]
+                                  return <StrengthIcon className={cn("h-4 w-4", strengthColors[password.strength as keyof typeof strengthColors])} />
                                 })()}
-                                <span className={strengthColors[password.strength]}>{password.strength}</span>
+                                <span className={strengthColors[password.strength as keyof typeof strengthColors]}>{password.strength}</span>
                               </div>
                             </TableCell>
                             <TableCell className="text-center">{new Date(password.createdAt).toLocaleDateString()}</TableCell>
