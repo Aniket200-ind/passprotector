@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useInView } from "react-intersection-observer";
+import { useState, useEffect, useCallback, useRef } from "react"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInView } from "react-intersection-observer"
 import {
   Home,
   Key,
@@ -22,10 +22,10 @@ import {
   ShieldAlert,
   Shield,
   Loader2,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,15 +33,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/dropdown-menu"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   SidebarProvider,
   Sidebar,
@@ -52,38 +45,32 @@ import {
   SidebarRail,
   SidebarInset,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { AddPasswordDialog } from "@/components/features/AddPasswordDialog";
-import { EditPasswordDialog } from "@/components/features/EditPasswordDialog";
-import { DeletePasswordDialog } from "@/components/features/DeletePasswordDialog";
-import toast from "react-hot-toast";
+} from "@/components/ui/sidebar"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { AddPasswordDialog } from "@/components/features/AddPasswordDialog"
+import { EditPasswordDialog } from "@/components/features/EditPasswordDialog"
+import { DeletePasswordDialog } from "@/components/features/DeletePasswordDialog"
+import toast from "react-hot-toast"
 
 // Types
 interface NavItem {
-  title: string;
-  href: string;
-  icon: React.ElementType;
-  isActive?: boolean;
+  title: string
+  href: string
+  icon: React.ElementType
+  isActive?: boolean
 }
 
 interface Password {
-  id: string;
-  siteName: string;
-  siteUrl: string;
-  username?: string;
-  decryptedPassword?: string;
-  category: "Personal" | "Work" | "Social" | "Finance" | "Shopping" | "Other";
-  strength: "Vulnerable" | "Weak" | "Moderate" | "Strong";
-  createdAt: string;
+  id: string
+  siteName: string
+  siteUrl: string
+  username?: string
+  decryptedPassword?: string
+  category: "Personal" | "Work" | "Social" | "Finance" | "Shopping" | "Other"
+  strength: "Vulnerable" | "Weak" | "Moderate" | "Strong"
+  createdAt: string
 }
 
 // Strength color mapping
@@ -92,14 +79,14 @@ const strengthColors = {
   Weak: "text-orange-500",
   Moderate: "text-yellow-500",
   Strong: "text-green-500",
-};
+}
 
 const strengthIcons = {
   Vulnerable: ShieldAlert,
   Weak: ShieldAlert,
   Moderate: Shield,
   Strong: Shield,
-};
+}
 
 export default function PasswordListComponent() {
   // Navigation items for the sidebar
@@ -111,220 +98,217 @@ export default function PasswordListComponent() {
       icon: Key,
       isActive: true,
     },
-  ];
+  ]
 
   // State
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
-  const [strengthFilter, setStrengthFilter] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<string>("createdAt");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [visiblePasswords, setVisiblePasswords] = useState<
-    Record<string, boolean>
-  >({});
-  const [selectedPassword, setSelectedPassword] = useState<Password | null>(
-    null
-  );
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("")
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null)
+  const [sortField, setSortField] = useState<string>("createdAt")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  const [strengthFilter, setStrengthFilter] = useState<string | null>(null)
+  const [visiblePasswords, setVisiblePasswords] = useState<Record<string, boolean>>({})
+  const [selectedPassword, setSelectedPassword] = useState<Password | null>(null)
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-  const { ref, inView } = useInView();
-  const passwordTimeouts = useRef<Record<string, NodeJS.Timeout>>({});
+  const { ref, inView } = useInView()
+  const passwordTimeouts = useRef<Record<string, NodeJS.Timeout>>({})
 
   // Fetch passwords with infinite query
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-    refetch,
-  } = useInfiniteQuery({
-    queryKey: [
-      "passwords",
-      searchQuery,
-      categoryFilter,
-      strengthFilter,
-      sortBy,
-      sortOrder,
-    ],
-    queryFn: async ({ pageParam = 0 }) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, refetch } = useInfiniteQuery({
+    queryKey: ["passwords", searchQuery, categoryFilter, strengthFilter, sortField, sortOrder],
+    queryFn: async ({ pageParam = 1 }) => {
       // Build query parameters
-      const params = new URLSearchParams();
-      params.append("skip", pageParam.toString());
-      params.append("take", "10");
+      const params = new URLSearchParams()
+      params.append("page", pageParam.toString())
 
-      if (searchQuery) params.append("search", searchQuery);
-      if (categoryFilter) params.append("category", categoryFilter);
-      if (strengthFilter) params.append("strength", strengthFilter);
-      params.append("sortBy", sortBy);
-      params.append("sortOrder", sortOrder);
+      if (searchQuery) params.append("search", searchQuery)
+      if (categoryFilter) params.append("category", categoryFilter)
+      if (strengthFilter) params.append("strength", strengthFilter)
+      params.append("sortField", sortField)
+      params.append("sortOrder", sortOrder)
 
       // Fetch passwords from API
-      const response = await fetch(`/api/passwords?${params.toString()}`);
+      const response = await fetch(`/api/passwords?${params.toString()}`)
 
       if (!response.ok) {
-        throw new Error("Failed to fetch passwords");
+        throw new Error("Failed to fetch passwords")
       }
 
-      const data = await response.json();
-      return data.passwords || [];
+      const data = await response.json()
+      return data.passwords || []
     },
     getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === 10 ? allPages.length * 10 : undefined;
+      return lastPage.length === 20 ? allPages.length + 1 : undefined
     },
-    initialPageParam: 0,
-  });
+    initialPageParam: 1,
+  })
 
   // Load more passwords when scrolling to the bottom
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+      fetchNextPage()
     }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
   // Auto-hide passwords after reveal
   const revealPassword = useCallback((id: string) => {
-    setVisiblePasswords((prev) => ({ ...prev, [id]: true }));
+    setVisiblePasswords((prev) => ({ ...prev, [id]: true }))
 
     // Clear any existing timeout for this password
     if (passwordTimeouts.current[id]) {
-      clearTimeout(passwordTimeouts.current[id]);
+      clearTimeout(passwordTimeouts.current[id])
     }
 
     // Set a new timeout to hide the password after 5 seconds
     passwordTimeouts.current[id] = setTimeout(() => {
-      setVisiblePasswords((prev) => ({ ...prev, [id]: false }));
-    }, 5000);
-  }, []);
+      setVisiblePasswords((prev) => ({ ...prev, [id]: false }))
+    }, 5000)
+  }, [])
 
   // Clean up timeouts on unmount
   useEffect(() => {
     return () => {
       Object.values(passwordTimeouts.current).forEach((timeout) => {
-        clearTimeout(timeout);
-      });
-    };
-  }, []);
+        clearTimeout(timeout)
+      })
+    }
+  }, [])
 
   // Copy to clipboard with security measures
-  const copyToClipboard = useCallback(
-    (text: string, type: "password" | "username") => {
-      navigator.clipboard
-        .writeText(text)
-        .then(() => {
-          toast.success(
-            `${
-              type === "password" ? "Password" : "Username"
-            } copied to clipboard`,
-            {
-              duration: 3000,
-              icon: "📋",
-            }
-          );
-
-          // If it's a password, schedule it to be cleared from clipboard after 30 seconds
-          if (type === "password") {
-            setTimeout(() => {
-              // We can't actually clear the clipboard, but we can overwrite it with a space
-              navigator.clipboard.writeText(" ").catch(() => {});
-            }, 30000);
-          }
+  const copyToClipboard = useCallback((text: string, type: "password" | "username") => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        toast.success(`${type === "password" ? "Password" : "Username"} copied to clipboard`, {
+          duration: 3000,
+          icon: "📋",
         })
-        .catch(() => {
-          toast.error("Could not copy to clipboard. Please try again.", {
-            duration: 3000,
-          });
-        });
-    },
-    []
-  );
+
+        // If it's a password, schedule it to be cleared from clipboard after 30 seconds
+        if (type === "password") {
+          setTimeout(() => {
+            // We can't actually clear the clipboard, but we can overwrite it with a space
+            navigator.clipboard.writeText(" ").catch(() => {})
+          }, 30000)
+        }
+      })
+      .catch(() => {
+        toast.error("Could not copy to clipboard. Please try again.", {
+          duration: 3000,
+        })
+      })
+  }, [])
 
   // Get favicon for a URL
   const getFavicon = (url: string) => {
     try {
-      const domain = new URL(url).hostname;
-      return `https://www.google.com/s2/favicons?domain=${domain}`;
+      const domain = new URL(url).hostname
+      return `https://www.google.com/s2/favicons?domain=${domain}`
     } catch {
-      return "/placeholder.svg?height=16&width=16";
+      return "/placeholder.svg?height=16&width=16"
     }
-  };
+  }
 
   // Handle password actions
   const handleEdit = (password: Password) => {
-    setSelectedPassword(password);
-    setIsEditDialogOpen(true);
-  };
+    setSelectedPassword(password)
+    setIsEditDialogOpen(true)
+  }
 
   const handleDelete = (password: Password) => {
-    setSelectedPassword(password);
-    setIsDeleteDialogOpen(true);
-  };
+    setSelectedPassword(password)
+    setIsDeleteDialogOpen(true)
+  }
 
   const handleOpenUrl = (url: string) => {
     if (!url.startsWith("http")) {
-      url = "https://" + url;
+      url = "https://" + url
     }
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+    window.open(url, "_blank", "noopener,noreferrer")
+  }
 
   // Fetch a specific password to get the decrypted value
   const fetchPassword = async (id: string) => {
     try {
-      const response = await fetch(`/api/passwords/${id}`);
+      const response = await fetch(`/api/passwords/${id}`)
       if (!response.ok) {
-        throw new Error("Failed to fetch password");
+        throw new Error("Failed to fetch password")
       }
 
-      const data = await response.json();
+      const data = await response.json()
       if (data.success && data.password) {
-        return data.password.decryptedPassword;
+        return data.password.decryptedPassword
       }
-      throw new Error("Password not found");
+      throw new Error("Password not found")
     } catch (error) {
-      console.error("Error fetching password:", error);
-      toast.error("Failed to fetch password. Please try again.");
-      return null;
+      console.error("Error fetching password:", error)
+      toast.error("Failed to fetch password. Please try again.")
+      return null
     }
-  };
+  }
 
   // Handle password reveal with decryption
   const handleRevealPassword = async (id: string) => {
     if (visiblePasswords[id]) {
       // If already visible, just hide it
-      setVisiblePasswords((prev) => ({ ...prev, [id]: false }));
-      return;
+      setVisiblePasswords((prev) => ({ ...prev, [id]: false }))
+      return
     }
 
     // Fetch the decrypted password
-    const decryptedPassword = await fetchPassword(id);
+    const decryptedPassword = await fetchPassword(id)
     if (decryptedPassword) {
       // Store the decrypted password temporarily
-      const updatedPasswords = [...(data?.pages.flat() || [])];
-      const passwordIndex = updatedPasswords.findIndex((p) => p.id === id);
+      const updatedPasswords = [...(data?.pages.flat() || [])]
+      const passwordIndex = updatedPasswords.findIndex((p) => p.id === id)
 
       if (passwordIndex !== -1) {
-        updatedPasswords[passwordIndex].decryptedPassword = decryptedPassword;
+        updatedPasswords[passwordIndex].decryptedPassword = decryptedPassword
       }
 
       // Show the password
-      revealPassword(id);
+      revealPassword(id)
     }
-  };
+  }
+
+  // Helper to get a readable label for the sort field
+  const getSortLabel = (field: string) => {
+    switch (field) {
+      case "siteName":
+        return "Site Name"
+      case "createdAt":
+        return "Date"
+      case "category":
+        return "Category"
+      case "strength":
+        return "Strength"
+      default:
+        return "Date"
+    }
+  }
+
+  // Handle sorting
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      // If clicking the same field, toggle the order
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+    } else {
+      // If clicking a different field, set it and default to descending order
+      setSortField(field)
+      setSortOrder("desc")
+    }
+  }
 
   // Flatten the pages of passwords
-  const passwords = data?.pages.flat() || [];
+  const passwords = data?.pages.flat() || []
 
   // Render loading skeleton
   const renderSkeleton = () => (
     <div className="space-y-4 animate-pulse">
       {Array.from({ length: 5 }).map((_, index) => (
-        <div
-          key={index}
-          className="flex items-center space-x-4 p-4 border-b border-deepPurple/20"
-        >
+        <div key={index} className="flex items-center space-x-4 p-4 border-b border-deepPurple/20">
           <Skeleton className="h-8 w-8 rounded-full" />
           <div className="space-y-2 flex-1">
             <Skeleton className="h-4 w-1/4" />
@@ -335,23 +319,19 @@ export default function PasswordListComponent() {
         </div>
       ))}
     </div>
-  );
+  )
 
   // Render error state
   const renderError = () => (
     <div className="p-4 text-center">
       <ShieldAlert className="h-12 w-12 mx-auto text-red-500 mb-4" />
-      <h2 className="text-xl font-bold text-red-500">
-        Error Loading Passwords
-      </h2>
-      <p className="mt-2 text-muted-foreground">
-        Failed to load your passwords. Please try refreshing the page.
-      </p>
+      <h2 className="text-xl font-bold text-red-500">Error Loading Passwords</h2>
+      <p className="mt-2 text-muted-foreground">Failed to load your passwords. Please try refreshing the page.</p>
       <Button variant="outline" className="mt-4" onClick={() => refetch()}>
         Try Again
       </Button>
     </div>
-  );
+  )
 
   return (
     <SidebarProvider className="mt-12">
@@ -366,11 +346,7 @@ export default function PasswordListComponent() {
             <hr className="border border-synthwavePink w-full" />
             {navItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={item.isActive}
-                  tooltip={item.title}
-                >
+                <SidebarMenuButton asChild isActive={item.isActive} tooltip={item.title}>
                   <a href={item.href}>
                     <item.icon className="h-5 w-5" />
                     <span>{item.title}</span>
@@ -388,19 +364,9 @@ export default function PasswordListComponent() {
         <div className="p-6 space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-fancy font-bold">
-                Password Manager
-              </h1>
-              <p className="text-muted-foreground">
-                Securely manage and organize all your passwords
-              </p>
+              <h1 className="text-3xl font-fancy font-bold">Password Manager</h1>
+              <p className="text-muted-foreground">Securely manage and organize all your passwords</p>
             </div>
-            <Button
-              onClick={() => setIsAddDialogOpen(true)}
-              className="bg-deepPurple hover:bg-deepPurple/80 text-white"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Add Password
-            </Button>
           </div>
 
           {/* Filters and Search */}
@@ -419,9 +385,7 @@ export default function PasswordListComponent() {
                 <div className="flex flex-wrap gap-2">
                   <Select
                     value={categoryFilter || "all"}
-                    onValueChange={(value) =>
-                      setCategoryFilter(value === "all" ? null : value)
-                    }
+                    onValueChange={(value) => setCategoryFilter(value === "all" ? null : value)}
                   >
                     <SelectTrigger className="w-[150px]">
                       <SelectValue placeholder="Category" />
@@ -436,12 +400,9 @@ export default function PasswordListComponent() {
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
-
                   <Select
                     value={strengthFilter || "all"}
-                    onValueChange={(value) =>
-                      setStrengthFilter(value === "all" ? null : value)
-                    }
+                    onValueChange={(value) => setStrengthFilter(value === "all" ? null : value)}
                   >
                     <SelectTrigger className="w-[150px]">
                       <SelectValue placeholder="Strength" />
@@ -454,44 +415,25 @@ export default function PasswordListComponent() {
                       <SelectItem value="Vulnerable">Vulnerable</SelectItem>
                     </SelectContent>
                   </Select>
-
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="gap-2">
-                        {sortOrder === "asc" ? (
-                          <SortAsc className="h-4 w-4" />
-                        ) : (
-                          <SortDesc className="h-4 w-4" />
-                        )}
-                        Sort
+                        {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+                        Sort: {getSortLabel(sortField)}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Sort by</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSortBy("siteName");
-                          setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                        }}
-                      >
+                      <DropdownMenuItem onClick={() => handleSort("siteName")} className="flex justify-between">
                         Site Name
+                        {sortField === "siteName" &&
+                          (sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />)}
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSortBy("createdAt");
-                          setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                        }}
-                      >
+                      <DropdownMenuItem onClick={() => handleSort("createdAt")} className="flex justify-between">
                         Date Created
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSortBy("strength");
-                          setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                        }}
-                      >
-                        Strength
+                        {sortField === "createdAt" &&
+                          (sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />)}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -512,11 +454,25 @@ export default function PasswordListComponent() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="text-cyberBlue">Site</TableHead>
+                        <TableHead className="text-cyberBlue cursor-pointer">
+                          Site{" "}
+                          {sortField === "siteName" &&
+                            (sortOrder === "asc" ? (
+                              <SortAsc className="inline h-3 w-3" />
+                            ) : (
+                              <SortDesc className="inline h-3 w-3" />
+                            ))}
+                        </TableHead>
                         <TableHead className="text-cyberBlue">Password</TableHead>
-                        <TableHead className="text-cyberBlue">Category</TableHead>
-                        <TableHead className="text-cyberBlue">Strength</TableHead>
-                        <TableHead className="text-cyberBlue">Created</TableHead>
+                        <TableHead className="text-cyberBlue cursor-pointer">
+                          Category
+                        </TableHead>
+                        <TableHead className="text-cyberBlue cursor-pointer">
+                          Strength
+                        </TableHead>
+                        <TableHead className="text-cyberBlue cursor-pointer text-center">
+                          Created
+                        </TableHead>
                         <TableHead className="text-right text-cyberBlue">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -525,53 +481,35 @@ export default function PasswordListComponent() {
                         <TableRow>
                           <TableCell colSpan={7} className="text-center py-8">
                             <Lock className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-                            <p className="text-lg font-medium">
-                              No passwords found
-                            </p>
-                            <p className="text-muted-foreground">
-                              {searchQuery || categoryFilter || strengthFilter
-                                ? "Try adjusting your filters"
-                                : "Add your first password to get started"}
-                            </p>
-                            {!searchQuery &&
-                              !categoryFilter &&
-                              !strengthFilter && (
-                                <Button
-                                  variant="outline"
-                                  className="mt-4"
-                                  onClick={() => setIsAddDialogOpen(true)}
-                                >
-                                  <Plus className="mr-2 h-4 w-4" /> Add Password
-                                </Button>
-                              )}
+                            <p className="text-lg font-medium">No passwords found</p>
+                            {!searchQuery && !categoryFilter && (
+                              <Button variant="outline" className="mt-4" onClick={() => setIsAddDialogOpen(true)}>
+                                <Plus className="mr-2 h-4 w-4" /> Add Password
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       ) : (
                         passwords.map((password) => (
-                          <TableRow
-                            key={password.id}
-                            className="group hover:bg-deepPurple/5 transition-colors"
-                          >
+                          <TableRow key={password.id} className="group hover:bg-deepPurple/5 transition-colors">
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <div className="h-8 w-8 rounded-full bg-deepPurple/10 flex items-center justify-center overflow-hidden">
                                   <img
                                     src={
                                       getFavicon(password.siteUrl) ||
+                                      "/placeholder.svg?height=16&width=16" ||
                                       "/placeholder.svg"
                                     }
                                     alt={password.siteName}
                                     className="h-4 w-4"
                                     onError={(e) => {
-                                      (e.target as HTMLImageElement).src =
-                                        "/placeholder.svg?height=16&width=16";
+                                      ;(e.target as HTMLImageElement).src = "/placeholder.svg?height=16&width=16"
                                     }}
                                   />
                                 </div>
                                 <div>
-                                  <div className="font-medium font-fancy">
-                                    {password.siteName}
-                                  </div>
+                                  <div className="font-medium font-fancy">{password.siteName}</div>
                                   <div className="text-xs text-muted-foreground truncate max-w-[150px]">
                                     {password.siteUrl}
                                   </div>
@@ -581,8 +519,7 @@ export default function PasswordListComponent() {
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <div className="font-mono bg-cyberBlue/10 px-2 py-1 rounded text-white">
-                                  {visiblePasswords[password.id] &&
-                                  password.decryptedPassword
+                                  {visiblePasswords[password.id] && password.decryptedPassword
                                     ? password.decryptedPassword
                                     : "••••••••"}
                                 </div>
@@ -590,14 +527,8 @@ export default function PasswordListComponent() {
                                   variant="ghost"
                                   size="icon"
                                   className="h-6 w-6"
-                                  onClick={() =>
-                                    handleRevealPassword(password.id)
-                                  }
-                                  aria-label={
-                                    visiblePasswords[password.id]
-                                      ? "Hide password"
-                                      : "Show password"
-                                  }
+                                  onClick={() => handleRevealPassword(password.id)}
+                                  aria-label={visiblePasswords[password.id] ? "Hide password" : "Show password"}
                                 >
                                   {visiblePasswords[password.id] ? (
                                     <EyeOff className="h-3 w-3" />
@@ -612,19 +543,12 @@ export default function PasswordListComponent() {
                                   onClick={async () => {
                                     // If password is not already decrypted, fetch it first
                                     if (!password.decryptedPassword) {
-                                      const decryptedPassword =
-                                        await fetchPassword(password.id);
+                                      const decryptedPassword = await fetchPassword(password.id)
                                       if (decryptedPassword) {
-                                        copyToClipboard(
-                                          decryptedPassword,
-                                          "password"
-                                        );
+                                        copyToClipboard(decryptedPassword, "password")
                                       }
                                     } else {
-                                      copyToClipboard(
-                                        password.decryptedPassword,
-                                        "password"
-                                      );
+                                      copyToClipboard(password.decryptedPassword, "password")
                                     }
                                   }}
                                   aria-label="Copy password"
@@ -633,41 +557,21 @@ export default function PasswordListComponent() {
                                 </Button>
                               </div>
                             </TableCell>
-                            <TableCell>
-                                {password.category}
-                            </TableCell>
+                            <TableCell>{password.category}</TableCell>
                             <TableCell>
                               <div className="flex items-center gap-1">
                                 {(() => {
-                                  const StrengthIcon =
-                                    strengthIcons[password.strength];
-                                  return (
-                                    <StrengthIcon
-                                      className={cn(
-                                        "h-4 w-4",
-                                        strengthColors[password.strength]
-                                      )}
-                                    />
-                                  );
+                                  const StrengthIcon = strengthIcons[password.strength]
+                                  return <StrengthIcon className={cn("h-4 w-4", strengthColors[password.strength])} />
                                 })()}
-                                <span
-                                  className={strengthColors[password.strength]}
-                                >
-                                  {password.strength}
-                                </span>
+                                <span className={strengthColors[password.strength]}>{password.strength}</span>
                               </div>
                             </TableCell>
-                            <TableCell>
-                              {new Date(password.createdAt).toLocaleDateString()}
-                            </TableCell>
+                            <TableCell className="text-center">{new Date(password.createdAt).toLocaleDateString()}</TableCell>
                             <TableCell className="text-right">
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-8 w-8"
-                                  >
+                                  <Button variant="ghost" size="icon" className="h-8 w-8">
                                     <span className="sr-only">Open menu</span>
                                     <svg
                                       width="15"
@@ -687,9 +591,7 @@ export default function PasswordListComponent() {
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                  <DropdownMenuItem
-                                    onClick={() => handleEdit(password)}
-                                  >
+                                  <DropdownMenuItem onClick={() => handleEdit(password)}>
                                     <Edit className="mr-2 h-4 w-4" />
                                     Edit
                                   </DropdownMenuItem>
@@ -697,30 +599,19 @@ export default function PasswordListComponent() {
                                     onClick={async () => {
                                       // If password is not already decrypted, fetch it first
                                       if (!password.decryptedPassword) {
-                                        const decryptedPassword =
-                                          await fetchPassword(password.id);
+                                        const decryptedPassword = await fetchPassword(password.id)
                                         if (decryptedPassword) {
-                                          copyToClipboard(
-                                            decryptedPassword,
-                                            "password"
-                                          );
+                                          copyToClipboard(decryptedPassword, "password")
                                         }
                                       } else {
-                                        copyToClipboard(
-                                          password.decryptedPassword,
-                                          "password"
-                                        );
+                                        copyToClipboard(password.decryptedPassword, "password")
                                       }
                                     }}
                                   >
                                     <Copy className="mr-2 h-4 w-4" />
                                     Copy Password
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() =>
-                                      handleOpenUrl(password.siteUrl)
-                                    }
-                                  >
+                                  <DropdownMenuItem onClick={() => handleOpenUrl(password.siteUrl)}>
                                     <ExternalLink className="mr-2 h-4 w-4" />
                                     Open Website
                                   </DropdownMenuItem>
@@ -750,10 +641,7 @@ export default function PasswordListComponent() {
                           <span>Loading more...</span>
                         </div>
                       ) : (
-                        <Button
-                          variant="outline"
-                          onClick={() => fetchNextPage()}
-                        >
+                        <Button variant="outline" onClick={() => fetchNextPage()}>
                           Load More
                         </Button>
                       )}
@@ -771,10 +659,10 @@ export default function PasswordListComponent() {
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
         onSuccess={() => {
-          refetch();
+          refetch()
           toast.success("Password added successfully", {
             icon: "🔐",
-          });
+          })
         }}
       />
 
@@ -785,10 +673,10 @@ export default function PasswordListComponent() {
             onOpenChange={setIsEditDialogOpen}
             password={selectedPassword}
             onSuccess={() => {
-              refetch();
+              refetch()
               toast.success("Password updated successfully", {
                 icon: "🔐",
-              });
+              })
             }}
           />
 
@@ -798,14 +686,14 @@ export default function PasswordListComponent() {
             passwordId={selectedPassword.id}
             siteName={selectedPassword.siteName}
             onSuccess={() => {
-              refetch();
+              refetch()
               toast.success("Password deleted successfully", {
                 icon: "🗑️",
-              });
+              })
             }}
           />
         </>
       )}
     </SidebarProvider>
-  );
+  )
 }
