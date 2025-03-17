@@ -172,7 +172,7 @@ export default function PasswordListComponent() {
     const currentTimeouts = passwordTimeouts.current;
 
     return () => {
-      Object.values(currentTimeouts).forEach(clearTimeout)
+      Object.values(currentTimeouts).forEach(clearTimeout )
     }
   }, [])
 
@@ -367,6 +367,12 @@ export default function PasswordListComponent() {
               <h1 className="text-3xl font-fancy font-bold">Password Manager</h1>
               <p className="text-muted-foreground">Securely manage and organize all your passwords</p>
             </div>
+            <Button
+              onClick={() => setIsAddDialogOpen(true)}
+              className="bg-deepPurple hover:bg-deepPurple/80 text-white"
+            >
+              <Plus className="mr-2 h-4 w-4" /> Add Password
+            </Button>
           </div>
 
           {/* Filters and Search */}
