@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, RefreshCw, Check, X } from "lucide-react";
+import { Loader2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -149,7 +149,7 @@ export function AddPasswordDialog({
       }
 
       onSuccess();
-      onOpenChange(false);
+      onOpenChange(false);  
       form.reset();
     } catch (error) {
       console.error("Failed to add password:", error);
