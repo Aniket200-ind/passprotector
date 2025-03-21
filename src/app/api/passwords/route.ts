@@ -58,7 +58,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const { siteName, siteUrl, password, category, strength } = parsedData.data;
 
     //* ✅ Prevent storing weak passwords (Optional but recommended)
-    if (strength === "VULNERABLE") {
+    if (strength === "Vulnerable") {
       return NextResponse.json(
         { success: false, message: "Weak passwords are not allowed!" },
         { status: 400 }
