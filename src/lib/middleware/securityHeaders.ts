@@ -25,7 +25,20 @@ export async function applySecurityHeaders(
   // response.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
   // response.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent embedding of a page in a different origin
   // response.headers.set("Cross-Origin-Resource-Policy", "same-origin"); //* Prevent loading resources from a different origin
-  response.headers.set("Access-Control-Allow-Origin", "https://www.passprotector.in"); //* Allow requests from any origin
+
+    // CORS
+    const allowedOrigins = new Set([
+      "https://www.passprotector.in",
+      "https://passprotector.in",
+    ]);
+    const origin = response.headers.get("x-request-origin") || ""; // will be set by middleware below
+  
+    const allowOrigin = allowedOrigins.has(origin) ? origin : "https://www.passprotector.in";
+    response.headers.set("Access-Control-Allow-Origin", allowOrigin);
+    response.headers.set("Vary", "Origin");
+    response.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    response.headers.set("Access-Control-Allow-Credentials", "true");
 
   return response;
 }

@@ -11,7 +11,23 @@ import { ratelimit } from "./lib/ratelimitConfig";
  * @returns {Promise<NextResponse>} - The response object, either allowing the request to proceed or indicating rate limit exceeded.
  */
 export async function middleware(req: NextRequest) {
+  // Handle CORS preflight for API routes
+  if (req.method === "OPTIONS" && req.nextUrl.pathname.startsWith("/api/")) {
+    const res = new NextResponse(null, { status: 204 });
+    const origin = req.headers.get("origin") || "";
+    res.headers.set("Access-Control-Allow-Origin", origin);
+    res.headers.set("Vary", "Origin");
+    res.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.headers.set("Access-Control-Allow-Credentials", "true");
+    return res;
+  }
+
   const res = NextResponse.next();
+
+    // Propagate origin for CORS helper
+    const origin = req.headers.get("origin") || "";
+    res.headers.set("x-request-origin", origin);
 
   //* Extract IP address from request headers
   const ip =
