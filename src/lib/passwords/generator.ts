@@ -3,6 +3,7 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import wordlist from "@/lib/passwords/wordlist.json"
 
 /**
  *? Options for password generation
@@ -15,15 +16,6 @@ export type PassswordOptions = {
   includeSymbols: boolean;
   excludeSimilar: boolean;
 };
-
-//* Define the path to wordlist
-const WORDLIST_PATH = path.join(
-  process.cwd(),
-  "src/lib/passwords/wordlist.json"
-);
-
-//* Load the wordlist once into memory at startup
-const wordlist = JSON.parse(fs.readFileSync(WORDLIST_PATH, "utf-8"));
 
 //* Alowwed special symbols
 const SYMBOLS = "!@#$%^&*()_+-={}[]<>?";
@@ -83,15 +75,14 @@ export const generateRandomPassword = (options: PassswordOptions): string => {
 };
 
 /**
- *? Effeciently fetches a random word from a large JSON wordlist.
- *? Uses files streaming to avoid loading everything into memory.
+ *? Fetches a random word from the wordlist.
  *
  * @returns {Promise<string>} - A randomly selected word.
  */
 const getRandomWord = async (): Promise<string> => {
   try {
-    const randomIndex = crypto.randomInt(0, wordlist.length);
-    return wordlist[randomIndex];
+    const randomIndex = crypto.randomInt(0, (wordlist as string[]).length);
+    return (wordlist as string[])[randomIndex];
   } catch (error) {
     console.error("[ERROR] Failed to get random word:", error);
     return "error";
