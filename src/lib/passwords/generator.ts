@@ -1,7 +1,5 @@
 //! lib/passwords/generator.ts
 
-import fs from "fs";
-import path from "path";
 import crypto from "crypto";
 import wordlist from "@/lib/passwords/wordlist.json"
 
