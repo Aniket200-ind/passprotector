@@ -159,4 +159,4 @@ For rationale, algorithms, and benchmarks, see the technical documentation in `d
 ---
 
 ### 📝 License
-MIT
+[MIT](https://github.com/Aniket200-ind/passprotector/blob/main/LICENSE)
