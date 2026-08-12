@@ -1,8 +1,111 @@
 /*! src/app/globals.css */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+/* darkMode: "class" equivalent — v4 defaults to media-query dark mode,
+   this restores the .dark-class-based behavior your app relies on */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Fonts — values point at the CSS vars next/font injects in layout.tsx.
+     NOTE: "mono" and "fancy" were renamed on the next/font side
+     (--font-jetbrains-mono / --font-montserrat) to avoid colliding with
+     these same-named theme tokens. See layout.tsx. */
+  --font-primary: var(--font-inter), Inter, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  --font-fancy: var(--font-montserrat), Montserrat, sans-serif;
+
+  /* Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* shadcn-style semantic colors */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Brand accents */
+  --color-golden: #ffd700;
+  --color-deepPurple: #6a0dad;
+  --color-cyberBlue: #00ffff;
+  --color-synthwavePink: #ff007f;
+  --color-charcoal: #121212;
+
+  /* Animations */
+  --animate-fade-in-up: fadeInUp 1.2s ease-out forwards;
+  --animate-fadeInwards: fadeInwards 0.5s ease-in-out;
+  --animate-cyberpunk-glow: cyberpunkGlow 1.5s infinite alternate;
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInwards {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes cyberpunkGlow {
+    0% {
+      box-shadow: 0 0 4px #00ffff;
+    }
+
+    50% {
+      box-shadow: 0 0 8px #00ffff, 0 0 12px #ff007f;
+    }
+
+    100% {
+      box-shadow: 0 0 4px #00ffff;
+    }
+  }
+}
 
 @layer base {
   :root {
@@ -40,6 +143,7 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -74,146 +178,123 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
 
-@layer base {
-  body {
-    @apply bg-background text-foreground;
-
-    ::selection{
-      @apply bg-cyan-900 text-cyan-400;
-    }
+  html {
+    color-scheme: light;
   }
-}
 
-@layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 transition-colors duration-300 ease-in-out;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+
+  ::selection {
+    @apply bg-cyan-900 text-cyan-400;
   }
 }
 
-/* Fade in animation for buttons */
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .loading-container {
+    @apply relative flex h-screen w-screen items-center justify-center overflow-hidden bg-black text-green-500;
+  }
+
+  .binary-overlay {
+    @apply absolute top-0 left-0 flex h-full w-screen flex-col gap-5 overflow-hidden;
+  }
+
+  .binary-scroll {
+    @apply font-mono text-2xl whitespace-nowrap opacity-30;
+    animation: scrollText 5s linear infinite;
+  }
+
+  .binary-scroll:nth-child(even) {
+    animation-duration: 5s;
+  }
+
+  .lock-container {
+    @apply relative z-10;
+  }
+
+  .password-slider {
+    @apply relative h-1.5 w-full rounded-full bg-gradient-to-r from-[#ff007f] to-[#00ffff] transition-colors duration-300;
+  }
+
+  .password-slider::-webkit-slider-runnable-track {
+    height: 6px;
+    background: linear-gradient(90deg, #ff007f, #00ffff);
+    border-radius: 4px;
+  }
+
+  .password-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  .password-slider:focus {
+    outline: none;
+    box-shadow: 0 0 5px #ffd700;
+  }
+
+  .shadow-cyberpunk {
+    animation: cyberpunk-glow 1.5s infinite alternate;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(26, 26, 46, 0.8);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #00ff00;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #00ff00 0%, #00ccff 100%);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+  }
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateY(-100vh);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-/* Smooth theme transition */
-* {
-  @apply transition-colors duration-300 ease-in-out;
-}
-
-/* Loading screen container */
-.loading-container {
-  @apply flex items-center justify-center h-screen w-screen relative bg-black text-green-500;
-  overflow: hidden;
-}
-
-/* Binary scrolling effect */
-.binary-overlay {
-  @apply absolute top-0 left-0 w-screen h-full overflow-hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.binary-scroll {
-  font-family: monospace;
-  font-size: 2rem;
-  opacity: 0.3;
-  white-space: nowrap;
-  animation: scrollText 5s linear infinite;
-}
-
-.binary-scroll:nth-child(even) {
-  animation-duration: 5s; /* Different speeds for variation */
-}
-
-@keyframes scrollText {
-  0% { transform: translateY(-100vh); } /** Start way above the screen */
-  100% { transform: translateY(100vh); } /** Move all the way down */
-}
-
-/* Lock animation container */
-.lock-container {
-  @apply relative z-10;
-}
-
-/** Slider Styling in PasswordGenerator */
-.password-slider {
-  width: 100%;
-  height: 6px;
-  background: linear-gradient(90deg, #ff007f, #00ffff);
-  border-radius: 4px;
-  position: relative;
-  transition: background 0.3s ease;
-}
-
-.password-slider::-webkit-slider-runnable-track {
-  height: 6px;
-  background: linear-gradient(90deg, #ff007f, #00ffff);
-  border-radius: 4px;
-}
-
-.password-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-}
-
-.password-slider:focus {
-  outline: none;
-  box-shadow: 0 0 5px #ffd700;
-}
-
-
-/** Cyberpunk glow effect  */
 @keyframes cyberpunk-glow {
-  0% { box-shadow: 0 0 4px #00FFFF; }
-  50% { box-shadow: 0 0 8px #00FFFF, 0 0 12px #FF007F; }
-  100% { box-shadow: 0 0 4px #00FFFF; }
-}
-
-.shadow-cyberpunk {
-  animation: cyberpunk-glow 1.5s infinite alternate;
-}
-
-/* Custom scrollbar styling for terminal section*/
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px; /* Width of the scrollbar */
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(26, 26, 46, 0.8); /* Dark track with slight transparency */
-  border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #00FF00;
-  border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #00FF00 0%, #00CCFF 100%); /* Gradient effect on hover */
-  box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Green glow effect on hover */
-}
-
-/*---break--- */
-
-@layer base {
-  * {
-    @apply border-border;
+  0% {
+    box-shadow: 0 0 4px #00ffff;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  50% {
+    box-shadow: 0 0 8px #00ffff, 0 0 12px #ff007f;
+  }
+
+  100% {
+    box-shadow: 0 0 4px #00ffff;
   }
 }
