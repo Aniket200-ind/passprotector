@@ -7,9 +7,12 @@ import { SessionProvider } from "next-auth/react";
 import ThemeProvider from "@/components/theme-provider";
 import { auth } from "@/auth";
 import { NavbarWrapper } from "@/components/layout/NavBarWrapper";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 //* Load fonts with subsets and CSS variables
+// NOTE: variable names below no longer match the Tailwind v4 theme tokens
+// (--font-mono / --font-fancy) in globals.css, to avoid a self-referencing
+// CSS custom property. globals.css maps these to font-mono / font-fancy.
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -17,12 +20,12 @@ const inter = Inter({
 });
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-fancy",
+  variable: "--font-montserrat",
   display: "swap",
 });
 
