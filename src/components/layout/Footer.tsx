@@ -6,12 +6,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ChevronUp,
-  Github,
-  Linkedin,
   Info,
   FileText,
   BookOpen,
-  Instagram,
 } from "lucide-react";
 import {
   Tooltip,
@@ -19,6 +16,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+import {
+  SiGithub,
+  SiInstagram,
+} from "@icons-pack/react-simple-icons";
 
 export default function Footer() {
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -122,7 +124,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group flex items-center text-foreground transition-all duration-300 sm:hover:text-cyberBlue"
               >
-                <Github className="mr-2 h-4 w-4" />
+                <SiGithub className="mr-2 h-4 w-4" />
                 <span className="relative">
                   GitHub Repository
                   <span className="absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-cyberBlue to-synthwavePink transition-all duration-300 sm:group:hover:w-full"></span>
@@ -158,7 +160,7 @@ export default function Footer() {
                 className="group flex h-10 w-10 items-center justify-center rounded-full border border-muted bg-background transition-all duration-300 sm:hover:border-deepPurple sm:hover:shadow-cyberpunk"
                 aria-label="GitHub"
               >
-                <Github className="h-5 w-5 text-foreground transition-all duration-300 sm:group-[]:hover:text-deepPurple" />
+                <SiGithub className="h-5 w-5 text-foreground transition-all duration-300 sm:group-[]:hover:text-deepPurple" />
               </Link>
 
               <Link
@@ -168,7 +170,7 @@ export default function Footer() {
                 className="group flex h-10 w-10 items-center justify-center rounded-full border border-muted bg-background transition-all duration-300 sm:hover:border-cyberBlue sm:hover:shadow-cyberpunk"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="h-5 w-5 text-foreground transition-all duration-300 sm:group-[]:hover:text-cyberBlue" />
+                {/* <Linkedin className="h-5 w-5 text-foreground transition-all duration-300 sm:group-[]:hover:text-cyberBlue" /> */}
               </Link>
 
               <Link
@@ -177,7 +179,7 @@ export default function Footer() {
                 className="group flex h-10 w-10 items-center justify-center rounded-full border border-muted bg-background transition-all duration-300 sm:hover:border-synthwavePink sm:hover:shadow-cyberpunk"
                 aria-label="Instagram"
               >
-                <Instagram className="h-5 w-5 text-foreground transition-all duration-300 sm:group-[]:hover:text-synthwavePink" />
+                <SiInstagram className="h-5 w-5 text-foreground transition-all duration-300 sm:group-[]:hover:text-synthwavePink" />
               </Link>
             </div>
             <p className="text-sm text-muted-foreground">
