@@ -7,7 +7,9 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "type": "module",
   "dependencies": {
@@ -72,12 +74,13 @@
     "@types/react-dom": "19.2.4",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
-    "jest-environment-jsdom": "^30.4.1",
+    "jsdom": "^30.0.1",
     "postcss": "^8",
     "prisma": "^7.9.1",
     "tailwindcss": "^4.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   },
   "overrides": {
     "@types/react": "19.2.18",
