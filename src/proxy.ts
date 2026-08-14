@@ -1,4 +1,4 @@
-//! src/middleware.ts
+//! src/proxy.ts
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -10,7 +10,7 @@ import { ratelimit } from "./lib/ratelimitConfig";
  * @param {NextRequest} req - The incoming request object.
  * @returns {Promise<NextResponse>} - The response object, either allowing the request to proceed or indicating rate limit exceeded.
  */
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   // Handle CORS preflight for API routes
   if (req.method === "OPTIONS" && req.nextUrl.pathname.startsWith("/api/")) {
     const res = new NextResponse(null, { status: 204 });
@@ -69,7 +69,6 @@ export async function middleware(req: NextRequest) {
     "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
   ); //* Restrict access to certain browser features
   res.headers.set("X-Frame-Options", "DENY"); //* Prevent clickjacking attacks by ensuring that a browser can't render a page in a frame
-  res.headers.set("X-XSS-Protection", "1; mode=block"); //* Enable the Cross-site scripting (XSS) filter built into most browsers
   res.headers.set("Cache-Control", "no-store, max-age=0"); //* Prevent caching of sensitive data
   res.headers.set("Cross-Origin-Opener-Policy", "same-origin"); //* Prevent the browser from opening a page in a different origin
   res.headers.set("Cross-Origin-Embedder-Policy", "require-corp"); //* Prevent the browser from embedding a page in a different origin
