@@ -243,7 +243,7 @@
   }
 
   .shadow-cyberpunk {
-    animation: cyberpunk-glow 1.5s infinite alternate;
+    @apply animate-cyberpunk-glow;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -283,19 +283,5 @@
 
   to {
     opacity: 1;
-  }
-}
-
-@keyframes cyberpunk-glow {
-  0% {
-    box-shadow: 0 0 4px #00ffff;
-  }
-
-  50% {
-    box-shadow: 0 0 8px #00ffff, 0 0 12px #ff007f;
-  }
-
-  100% {
-    box-shadow: 0 0 4px #00ffff;
   }
 }
