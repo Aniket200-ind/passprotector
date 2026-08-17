@@ -17,27 +17,27 @@ import {
   AlertTriangle,
   LockKeyholeIcon,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 export default function FeaturesShowcase() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     let resizeTimeout: ReturnType<typeof setTimeout>;
-  
+
     const checkIfMobile = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         setIsMobile(window.innerWidth < 768);
       }, 2000); // Debounce delay
     };
-  
+
     // Initial check
     checkIfMobile();
-  
+
     // Add event listener
     window.addEventListener("resize", checkIfMobile);
-  
+
     // Cleanup
     return () => {
       clearTimeout(resizeTimeout);
@@ -100,7 +100,7 @@ export default function FeaturesShowcase() {
     },
   ];
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -109,7 +109,7 @@ export default function FeaturesShowcase() {
     },
   };
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -131,7 +131,7 @@ export default function FeaturesShowcase() {
           variants={containerVariants}
         >
           <motion.h2
-            className="text-4xl md:text-5xl font-fancy font-bold mb-4 bg-gradient-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent"
+            className="text-4xl md:text-5xl font-fancy font-bold mb-4 bg-linear-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent"
             variants={itemVariants}
           >
             Cutting-Edge Security Features
