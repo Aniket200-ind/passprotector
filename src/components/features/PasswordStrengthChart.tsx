@@ -25,13 +25,16 @@ interface PasswordStrengthChartProps {
 export function PasswordStrengthChart({ data }: PasswordStrengthChartProps) {
   return (
     <ChartContainer
-      config={data.reduce((acc, item) => {
-        acc[item.name.toLowerCase()] = {
-          label: item.name,
-          color: item.color,
-        };
-        return acc;
-      }, {} as Record<string, { label: string; color: string }>)}
+      config={data.reduce(
+        (acc, item) => {
+          acc[item.name.toLowerCase()] = {
+            label: item.name,
+            color: item.color,
+          };
+          return acc;
+        },
+        {} as Record<string, { label: string; color: string }>,
+      )}
       className="w-full h-full"
     >
       <ResponsiveContainer width="100%" height="100%">
@@ -40,10 +43,8 @@ export function PasswordStrengthChart({ data }: PasswordStrengthChartProps) {
             data={data}
             cx="50%"
             cy="50%"
-            // @ts-expect-error - Recharts supports function radius but types don't reflect this
-            innerRadius={({ width, height }) => Math.min(width, height) * 0.2}
-            // @ts-expect-error - Recharts supports function radius but types don't reflect this
-            outerRadius={({ width, height }) => Math.min(width, height) * 0.35}
+            innerRadius="60%"
+            outerRadius="70%"
             fill="#8884d8"
             paddingAngle={5}
             dataKey="value"
