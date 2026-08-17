@@ -25,34 +25,36 @@ interface PasswordCategoryChartProps {
 export function PasswordCategoryChart({ data }: PasswordCategoryChartProps) {
   return (
     <ChartContainer
-      config={data.reduce((acc, item) => {
-        acc[item.name.toLowerCase()] = {
-          label: item.name,
-          color: item.color,
-        };
-        return acc;
-      }, {} as Record<string, { label: string; color: string }>)}
+      config={data.reduce(
+        (acc, item) => {
+          acc[item.name.toLowerCase()] = {
+            label: item.name,
+            color: item.color,
+          };
+          return acc;
+        },
+        {} as Record<string, { label: string; color: string }>,
+      )}
       className="w-full h-full"
     >
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart 
-        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-        aria-label="Password Category Pie Chart"
+        <PieChart
+          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          aria-label="Password Category Pie Chart"
         >
           <Pie
             data={data}
             cx="50%"
             cy="50%"
             labelLine={false}
-            // @ts-expect-error - Recharts supports function radius but types don't reflect this
-            outerRadius={({ width, height }) => Math.min(width, height) * 0.35}
+            outerRadius="70%"
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
             label={({ name, percent }) =>
-              `${name}: ${(percent * 100).toFixed(0)}%`
+              `${name}: ${((percent ?? 0) * 100).toFixed(0)}%`
             }
-            role="Password Category Pie Chart"  
+            role="Password Category Pie Chart"
             aria-describedby="password-category-chart"
           >
             {data.map((entry, index) => (
