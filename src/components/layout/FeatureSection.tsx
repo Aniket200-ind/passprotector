@@ -131,7 +131,7 @@ export default function FeaturesShowcase() {
           variants={containerVariants}
         >
           <motion.h2
-            className="text-4xl md:text-5xl font-fancy font-bold mb-4 bg-linear-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent leading-normal"
+            className="text-4xl md:text-5xl font-fancy font-bold mb-4 bg-linear-to-r from-cyberBlue via-fuchsia-500 to-synthwavePink bg-clip-text text-transparent leading-normal"
             variants={itemVariants}
           >
             Cutting-Edge Security Features
