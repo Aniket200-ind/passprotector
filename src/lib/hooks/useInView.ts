@@ -16,7 +16,12 @@ export function useInView(
 
     //* Create an IntersectionObserver to observe visibility changes
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting), //* Update state based on intersection
+      ([entry]) =>  {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      }, //* Update state based on intersection
       { rootMargin: margin } //* Set margin for intersection
     );
 
