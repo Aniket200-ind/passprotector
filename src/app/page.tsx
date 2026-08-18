@@ -65,6 +65,7 @@ export default function Page() {
         rootMargin="200px"
         fallback={<SectionSkeleton />}
         className="w-full"
+        id="features"
       >
         <Suspense fallback={<SectionSkeleton />}>
           <FeaturesShowcase />
