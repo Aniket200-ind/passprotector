@@ -21,7 +21,7 @@ const SecurityTerminal = React.lazy(
   () => import("@/components/layout/SecurityTerminalSection")
 );
 
-//* Simple skeleton components
+
 const SectionSkeleton = () => (
   <div className="w-full py-16">
     <div className="container px-4 md:px-6">
