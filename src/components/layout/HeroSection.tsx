@@ -114,7 +114,7 @@ export default function HeroSection() {
               variant="outline"
               size="lg"
               onClick={scrollToFeatures}
-              className="border-cyberBlue text-cyberBlue hover:bg-cyberBlue/10 transition-all transform duration-200 hover:scale-[1.02] cursor-pointer"
+              className="border-cyberBlue text-cyberBlue hover:bg-cyberBlue/20 transition-all transform duration-200 hover:scale-[1.02] cursor-pointer"
             >
               Explore Features
             </Button>
