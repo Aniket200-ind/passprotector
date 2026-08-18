@@ -8,7 +8,7 @@ import { InViewSection } from "@/components/InViewSection";
 
 //* Lazy load components
 const WhyUseSection = React.lazy(
-  () => import("@/components/layout/EducationSection")
+  () => import("@/components/layout/WhyUseSection")
 );
 const HowItWorks = React.lazy(() => import("@/components/layout/HowItWorks"));
 const FeaturesShowcase = React.lazy(
