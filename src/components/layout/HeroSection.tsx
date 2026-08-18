@@ -33,8 +33,8 @@ export default function HeroSection() {
               key={i}
               className="binary-scroll"
               style={{
-                animationDuration: `${6 + i * 0.5}s`,
-                opacity: 0.1,
+                animationDuration: `${10 + i * 0.5}s`,
+                opacity: 0.07 + (i % 3) * 0.02,
                 transform: `translateY(${-100 + i * 20}vh)`,
               }}
             >
@@ -167,9 +167,6 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
-
-      {/* Gradient overlay at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent pointer-events-none"></div>
     </section>
   );
 }
