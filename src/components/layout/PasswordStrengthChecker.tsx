@@ -170,7 +170,7 @@ export default function PasswordStrengthChecker() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h2 className="text-3xl font-fancy font-bold sm:text-4xl md:text-5xl bg-gradient-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent">
+          <h2 className="text-3xl font-fancy font-bold sm:text-4xl md:text-5xl bg-gradient-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent leading-normal">
             Test Your Password&apos;s Strength Instantly
           </h2>
           <p className="max-w-[700px] font-primary mx-auto text-muted-foreground md:text-xl mt-4">
