@@ -65,7 +65,7 @@ export default function WhyUseSection() {
               variants={floatingAnimation}
             >
               <div className="relative z-10">
-                <div className="w-48 h-48 mx-auto bg-linear-to-br from-synthwavePink to-cyberBlue rounded-2xl flex items-center justify-center shadow-cyberpunk">
+                <div className="w-48 h-48 mx-auto bg-linear-to-br from-synthwavePink via-deepPurple to-cyberBlue rounded-2xl flex items-center justify-center shadow-cyberpunk">
                   <LockKeyhole className="w-24 h-24 text-golden" />
                 </div>
 
