@@ -8,7 +8,7 @@ export function useInView(
   margin: string = "0px"
 ) {
   //* State to track visibility
-  const [isVisible, setIsVisible] = useState(false);
+  const [hasEnteredView, setHasEnteredView] = useState(false);
 
   useEffect(() => {
     //* Exit if ref is not assigned
@@ -18,7 +18,7 @@ export function useInView(
     const observer = new IntersectionObserver(
       ([entry]) =>  {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          setHasEnteredView(true);
           observer.disconnect();
         }
       }, //* Update state based on intersection
@@ -29,5 +29,5 @@ export function useInView(
     return () => observer.disconnect(); //* Cleanup observer on unmount
   }, [ref, margin]); //* Re-run effect if ref or margin changes
 
-  return isVisible; //* Return visibility state
+  return hasEnteredView; //* Return visibility state
 }
