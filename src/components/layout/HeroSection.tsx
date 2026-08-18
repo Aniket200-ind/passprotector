@@ -24,7 +24,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative min-h-dvh flex items-center justify-center overflow-hidden bg-background">
       {/* Binary background animation */}
       {mounted && (
         <div className="binary-overlay" aria-hidden="true">
@@ -103,7 +103,7 @@ export default function HeroSection() {
           >
             <Button
               size="lg"
-              className="bg-gradient-to-r from-synthwavePink to-cyberBlue hover:opacity-90 transition-all duration-300 transform hover:scale-105 text-white font-medium"
+              className="bg-linear-to-r from-synthwavePink to-cyberBlue hover:opacity-90 transition-all duration-300 transform hover:scale-105 text-white font-medium"
               aria-label="Get Started"
               aria-hidden="true"
             >
@@ -172,7 +172,7 @@ export default function HeroSection() {
       </div>
 
       {/* Gradient overlay at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent pointer-events-none"></div>
     </section>
   );
 }
