@@ -2,14 +2,14 @@
 
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { LockKeyhole, ShieldCheck, Brain, Zap, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function WhyUseSection() {
   // Animation variants
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -20,7 +20,7 @@ export default function WhyUseSection() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -29,14 +29,14 @@ export default function WhyUseSection() {
     },
   };
 
-  const floatingAnimation = {
+  const floatingAnimation: Variants = {
     initial: { y: 0 },
     animate: {
       y: [0, -20, 0],
       transition: {
         duration: 4,
         repeat: Number.POSITIVE_INFINITY,
-        repeatType: "reverse" as const,
+        repeatType: "reverse",
         ease: "easeInOut",
       },
     },
@@ -49,8 +49,8 @@ export default function WhyUseSection() {
     >
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            {/* Left side - Illustration */}
-            <motion.div
+          {/* Left side - Illustration */}
+          <motion.div
             className="flex justify-center order-2 mt-16 md:order-1 md:mt-0"
             initial="hidden"
             whileInView="visible"
@@ -64,7 +64,7 @@ export default function WhyUseSection() {
               variants={floatingAnimation}
             >
               <div className="relative z-10">
-                <div className="w-48 h-48 mx-auto bg-gradient-to-br from-synthwavePink to-cyberBlue rounded-2xl flex items-center justify-center shadow-cyberpunk">
+                <div className="w-48 h-48 mx-auto bg-linear-to-br from-synthwavePink to-cyberBlue rounded-2xl flex items-center justify-center shadow-cyberpunk">
                   <LockKeyhole className="w-24 h-24 text-golden" />
                 </div>
 
@@ -145,7 +145,7 @@ export default function WhyUseSection() {
           >
             <motion.h2
               id="why-use-heading"
-              className="text-4xl md:text-5xl font-fancy font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyberBlue to-synthwavePink text-center sm:text-left"
+              className="text-4xl md:text-5xl font-fancy font-bold mb-6 text-transparent bg-clip-text bg-linear-to-r from-cyberBlue to-synthwavePink text-center sm:text-left"
               variants={itemVariants}
             >
               Why Use a Password Manager?
@@ -244,8 +244,11 @@ export default function WhyUseSection() {
               </div>
             </motion.div>
 
-            <motion.div className="mt-8 flex justify-center sm:justify-start" variants={itemVariants}>
-              <Button className="bg-gradient-to-r from-cyberBlue to-synthwavePink hover:opacity-80 text-white px-8 py-6 rounded-lg text-lg font-semibold transition-all animate-fadeInwards outline-none">
+            <motion.div
+              className="mt-8 flex justify-center sm:justify-start"
+              variants={itemVariants}
+            >
+              <Button className="bg-linear-to-r from-cyberBlue to-synthwavePink hover:opacity-80 text-white px-8 py-6 rounded-lg text-lg font-semibold transition-all animate-fadeInwards outline-none">
                 <Link href="/login" prefetch={true}>
                   Get Started
                 </Link>
