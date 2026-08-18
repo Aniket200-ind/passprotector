@@ -56,6 +56,7 @@ export default function WhyUseSection() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={containerVariants}
+            aria-hidden
           >
             <motion.div
               className="relative w-full max-w-md"
@@ -131,7 +132,7 @@ export default function WhyUseSection() {
               </div>
 
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-cyberBlue/20 blur-3xl rounded-full -z-10"></div>
+              <div className="absolute inset-0 bg-cyberBlue/30 blur-3xl rounded-full -z-10"></div>
             </motion.div>
           </motion.div>
 
@@ -145,7 +146,7 @@ export default function WhyUseSection() {
           >
             <motion.h2
               id="why-use-heading"
-              className="text-4xl md:text-5xl font-fancy font-bold mb-6 text-transparent bg-clip-text bg-linear-to-r from-cyberBlue to-synthwavePink text-center sm:text-left"
+              className="text-4xl md:text-5xl font-fancy font-bold mb-6 text-transparent leading-normal bg-clip-text bg-linear-to-r from-cyberBlue via-fuchsia-500 to-synthwavePink text-center sm:text-left"
               variants={itemVariants}
             >
               Why Use a Password Manager?
@@ -190,7 +191,7 @@ export default function WhyUseSection() {
                   </h3>
                   <p className="text-gray-300">
                     A password manager keeps all your passwords in one safe
-                    place, protected by military-grade encryption.
+                    place, protected using strong, modern encryption standards.
                   </p>
                 </div>
               </motion.div>
@@ -248,10 +249,11 @@ export default function WhyUseSection() {
               className="mt-8 flex justify-center sm:justify-start"
               variants={itemVariants}
             >
-              <Button className="bg-linear-to-r from-cyberBlue to-synthwavePink hover:opacity-80 text-white px-8 py-6 rounded-lg text-lg font-semibold transition-all animate-fadeInwards outline-none">
-                <Link href="/login" prefetch={true}>
-                  Get Started
-                </Link>
+              <Button
+                asChild
+                className="bg-linear-to-tr from-synthwavePink to-deepPurple hover:scale-105 text-white px-8 py-6 rounded-lg text-lg font-semibold transition-all transform duration-300 outline-none cursor-pointer"
+              >
+                <Link href="/login">Get Started</Link>
               </Button>
             </motion.div>
           </motion.div>
