@@ -47,10 +47,10 @@ export default function HeroSection() {
       )}
 
       {/* Main content */}
-      <div className="container relative z-10 px-4 md:px-6 py-8">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
+      <div className="relative z-10 px-4">
+        <div className="flex flex-col items-center text-center">
           {/* Lock icon with glow effect */}
-          <div className="lock-container my-6">
+          <div className="lock-container mb-6">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -77,7 +77,7 @@ export default function HeroSection() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl"
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mt-5"
           >
             A modern,{" "}
             <span className="underline underline-offset-4 decoration-cyberBlue">
@@ -99,15 +99,14 @@ export default function HeroSection() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 mt-8"
+            className="flex flex-col sm:flex-row gap-4 mt-10"
           >
             <Button
+              asChild
               size="lg"
-              className="bg-linear-to-r from-synthwavePink to-cyberBlue hover:opacity-90 transition-all duration-300 transform hover:scale-105 text-white font-medium"
-              aria-label="Get Started"
-              aria-hidden="true"
+              className="bg-linear-to-tr from-synthwavePink to-deepPurple transition-all duration-200 transform hover:opacity-90 hover:scale-[1.02] text-white font-medium"
             >
-              <Link href="/login" prefetch={true}>
+              <Link href="/login">
                 Get Started
               </Link>
             </Button>
@@ -115,9 +114,7 @@ export default function HeroSection() {
               variant="outline"
               size="lg"
               onClick={scrollToFeatures}
-              className="border-cyberBlue text-cyberBlue hover:bg-cyberBlue/10 transition-all duration-300 transform hover:scale-105"
-              aria-label="Explore Features"
-              aria-hidden="true"
+              className="border-cyberBlue text-cyberBlue hover:bg-cyberBlue/10 transition-all transform duration-200 hover:scale-[1.02] cursor-pointer"
             >
               Explore Features
             </Button>
@@ -128,7 +125,7 @@ export default function HeroSection() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12 w-full max-w-3xl"
+            className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10 w-full max-w-3xl"
           >
             {[
               {
