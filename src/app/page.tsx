@@ -36,7 +36,7 @@ const SectionSkeleton = () => (
 
 export default function Page() {
   return (
-    <main className="flex flex-col items-center justify-center bg-background text-foreground mt-10">
+    <main className="flex flex-col items-center justify-center bg-background text-foreground mt-10 md:mt-0">
       {/* Always render immediately */}
       <HeroSection />
 
