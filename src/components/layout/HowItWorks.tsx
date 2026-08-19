@@ -8,41 +8,40 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Shield, Vault, Search, Globe } from "lucide-react";
 
+const steps = [
+  {
+    id: 1,
+    title: "Sign in using Google OAuth",
+    description:
+      "Quick & secure login using your Google account. No need to remember another password.",
+    icon: Shield,
+  },
+  {
+    id: 2,
+    title: "Store and manage passwords securely",
+    description:
+      "Save passwords in an encrypted vault, accessible only to you.",
+    icon: Vault,
+  },
+  {
+    id: 3,
+    title: "Use real-time strength analysis & generator",
+    description:
+      "Check password strength and generate ultra-secure passwords instantly.",
+    icon: Search,
+  },
+  {
+    id: 4,
+    title: "Access passwords anytime, anywhere",
+    description:
+      "Your passwords are always available, securely synced across devices.",
+    icon: Globe,
+  },
+];
+
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Steps data
-  const steps = [
-    {
-      id: 1,
-      title: "Sign in using Google OAuth",
-      description:
-        "Quick & secure login using your Google account. No need to remember another password.",
-      icon: Shield,
-    },
-    {
-      id: 2,
-      title: "Store and manage passwords securely",
-      description:
-        "Save passwords in an encrypted vault, accessible only to you.",
-      icon: Vault,
-    },
-    {
-      id: 3,
-      title: "Use real-time strength analysis & generator",
-      description:
-        "Check password strength and generate ultra-secure passwords instantly.",
-      icon: Search,
-    },
-    {
-      id: 4,
-      title: "Access passwords anytime, anywhere",
-      description:
-        "Your passwords are always available, securely synced across devices.",
-      icon: Globe,
-    },
-  ];
 
   // Handle scroll-based step activation
   useEffect(() => {
@@ -144,9 +143,9 @@ export default function HowItWorks() {
             ))}
 
             {/* Progress bar */}
-            <div className="absolute top-8 left-0 w-full h-0.5 bg-secondary/30">
+            <div className="absolute top-8 left-[12.5%] w-[75%] h-0.5 bg-secondary/30">
               <motion.div
-                className="h-full bg-linear-to-r from-cyberBlue to-synthwavePink shadow-cyberpunk"
+                className="h-full bg-linear-to-r from-cyberBlue via-deepPurple to-synthwavePink shadow-cyberpunk"
                 initial={{ width: "0%" }}
                 animate={{
                   width: `${(activeStep / (steps.length - 1)) * 100}%`,
