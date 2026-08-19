@@ -31,7 +31,7 @@ export function StrengthMeter({ score, PasswordStrength }: StrengthMeterProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-cyberBlue">Password Strength</span>
-          <SuggestionTooltip message="Strength is estimated from password length and character variety. A strong rating reduces risk but doesn't guarantee complete security. So the meter never shows 100%" />
+          <SuggestionTooltip message="Strength is estimated from password length and character variety. A strong rating reduces risk but doesn't guarantee complete security." />
         </div>
         <motion.span
           className="text-sm font-mono font-extrabold flex items-center gap-1"
