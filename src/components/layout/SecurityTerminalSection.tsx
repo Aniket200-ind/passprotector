@@ -71,7 +71,6 @@ export default function SecurityTerminal() {
     };
   }, []);
 
-  // Optimized typewriter effect
   // Optimized typewriter effect with fixed faster speed
   useEffect(() => {
     // Only run animation if section is visible AND tab is active
@@ -106,7 +105,7 @@ export default function SecurityTerminal() {
         animationRef.current = setTimeout(() => {
           setCurrentLineIndex((prev) => prev + 1);
           setCurrentCharIndex(0);
-        }, 500); // Shorter pause between lines - 200ms
+        }, 500); // Shorter pause between lines
       }
     } else {
       // All lines complete
@@ -153,7 +152,7 @@ export default function SecurityTerminal() {
       />
 
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-6">
           <h2 
             className="text-2xl sm:text-3xl md:text-4xl font-fancy font-bold text-cyberBlue"
             id="securityTerminalHeading"
@@ -198,7 +197,7 @@ export default function SecurityTerminal() {
           {/* Terminal content */}
           <div
             ref={terminalRef}
-            className="font-mono text-sm md:text-base h-[400px] overflow-y-auto custom-scrollbar"
+            className="font-mono text-sm md:text-base h-100 overflow-y-auto custom-scrollbar"
             role="log"
             aria-live="polite"
             aria-label="Security features terminal output"
