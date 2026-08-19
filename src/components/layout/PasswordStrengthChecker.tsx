@@ -151,11 +151,6 @@ export default function PasswordStrengthChecker() {
         completed: /[A-Z]/.test(password),
         tooltipMessage: "Mixing upper and lowercase letters increases entropy, strengthening your password against automated attacks."
       },
-      { 
-        text: "Include lowercase letters", 
-        completed: /[a-z]/.test(password),
-        tooltipMessage: "Using lowercase letters is essential for creating diverse, hard-to-guess passwords."
-      },
     ];
     
     return suggestions;
@@ -180,6 +175,7 @@ export default function PasswordStrengthChecker() {
         </motion.div>
 
         <div className="max-w-4xl lg:max-w-5xl mx-auto py-12 grid lg:grid-cols-2 gap-10">
+          {/* Password Input Card */}
           <Card className="border-none bg-secondary/40">
             <CardContent className="px-6 py-4">
               <div className="space-y-6 lg:space-y-8">
@@ -237,6 +233,7 @@ export default function PasswordStrengthChecker() {
             </CardContent>
           </Card>
 
+          {/* Suggestions card */}
           <div className="bg-secondary/30 px-6 py-4 rounded-lg border text-center space-y-6">
             <h3 className="text-xl lg:text-2xl font-fancy font-semibold text-cyberBlue">
               Password Suggestions
