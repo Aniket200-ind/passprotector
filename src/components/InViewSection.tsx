@@ -5,7 +5,16 @@
 import React, { useRef } from "react";
 import { useInView } from "@/lib/hooks/useInView";
 
-/**
+interface InViewSectionProps
+ extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  rootMargin?: string;
+  fallback: React.ReactNode;
+  className?: string;
+  id?: string;
+}
+
+/*
  * Component to conditionally render content based on visibility in the viewport using IntersectionObserver
  * @param children The content to be displayed when in view
  * @param rootMargin Margin around the root element for intersection observer
@@ -13,22 +22,17 @@ import { useInView } from "@/lib/hooks/useInView";
  * @param className Additional classes to apply to the container div
  */
 export function InViewSection({
-  children, //* The content to be displayed when in view
-  rootMargin = "200px", //* Margin around the root element for intersection observer
-  fallback, //* The content to be displayed when not in view
+  children,
+  rootMargin = "200px",
+  fallback,
   className = "",
-}: {
-  children: React.ReactNode;
-  rootMargin?: string;
-  fallback: React.ReactNode;
-  className?: string;
-}) {
+  id
+}: InViewSectionProps) {
   const ref = useRef<HTMLDivElement>(null); //* Reference to the container div
-  const isInView = useInView(ref, rootMargin); //* Custom hook to check if the element is in view
+  const isInView = useInView(ref, rootMargin);
 
   return (
-    <div ref={ref} className={className}>
-      {/** Render children if in view, otherwise render fallback */}
+    <div ref={ref} id={id} className={className}>
       {isInView ? children : fallback}
     </div>
   );

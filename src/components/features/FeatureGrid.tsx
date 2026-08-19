@@ -21,7 +21,7 @@ export function FeaturesGrid({ features }: FeaturesGridProps) {
       viewport={{ once: true }}
       variants={{
         hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+        visible: { opacity: 1},
       }}
     >
       {features.map((feature, index) => (

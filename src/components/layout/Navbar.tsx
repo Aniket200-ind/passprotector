@@ -59,7 +59,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
           prefetch={false}
         >
           <Shield className="h-6 w-6 text-synthwavePink" />
-          <span className="bg-gradient-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent">
             PassProtector
           </span>
         </Link>
@@ -75,7 +75,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                   className={cn(
                     "relative font-medium text-gray-300 transition-colors hover:text-cyberBlue",
                     pathname === link.href &&
-                      "text-cyberBlue after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-gradient-to-r after:from-cyberBlue after:to-synthwavePink after:content-['']"
+                      "text-cyberBlue after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-cyberBlue after:to-synthwavePink after:content-['']"
                   )}
                 >
                   {link.label}
@@ -97,7 +97,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                       alt={user.name || "User"}
                       loading="lazy"
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-deepPurple to-synthwavePink text-white">
+                    <AvatarFallback className="bg-linear-to-br from-deepPurple to-synthwavePink text-white">
                       {user.name?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
@@ -131,7 +131,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button className="bg-gradient-to-r from-cyberBlue to-synthwavePink text-white hover:from-cyberBlue hover:to-synthwavePink">
+            <Button className="bg-linear-to-tr from-synthwavePink to-deepPurple text-white hover:from-deepPurple hover:to-synthwavePink cursor-pointer">
               <Link href="/login">Login</Link>
             </Button>
           )}
@@ -151,7 +151,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2 font-montserrat text-xl font-bold text-cyberBlue">
                   <Shield className="h-6 w-6 text-synthwavePink" />
-                  <span className="bg-gradient-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent">
                     PassProtector
                   </span>
                 </SheetTitle>
@@ -179,7 +179,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                             src={user.image || ""}
                             alt={user.name || "User"}
                           />
-                          <AvatarFallback className="bg-gradient-to-br from-deepPurple to-synthwavePink text-white">
+                          <AvatarFallback className="bg-linear-to-br from-deepPurple to-synthwavePink text-white">
                             {user.name?.charAt(0) || "U"}
                           </AvatarFallback>
                         </Avatar>
@@ -204,7 +204,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                     </>
                   ) : (
                     <Button
-                      className="w-full bg-gradient-to-r from-cyberBlue to-synthwavePink text-white hover:from-cyberBlue hover:to-synthwavePink"
+                      className="w-full bg-linear-to-r from-cyberBlue to-synthwavePink text-white hover:from-cyberBlue hover:to-synthwavePink"
                       onClick={closeSheet}
                     >
                       <Link href="/login">Login</Link>

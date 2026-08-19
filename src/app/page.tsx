@@ -8,7 +8,7 @@ import { InViewSection } from "@/components/InViewSection";
 
 //* Lazy load components
 const WhyUseSection = React.lazy(
-  () => import("@/components/layout/EducationSection")
+  () => import("@/components/layout/WhyUseSection")
 );
 const HowItWorks = React.lazy(() => import("@/components/layout/HowItWorks"));
 const FeaturesShowcase = React.lazy(
@@ -21,7 +21,7 @@ const SecurityTerminal = React.lazy(
   () => import("@/components/layout/SecurityTerminalSection")
 );
 
-//* Simple skeleton components
+
 const SectionSkeleton = () => (
   <div className="w-full py-16">
     <div className="container px-4 md:px-6">
@@ -36,7 +36,7 @@ const SectionSkeleton = () => (
 
 export default function Page() {
   return (
-    <main className="flex flex-col items-center justify-center bg-background text-foreground mt-10">
+    <main className="flex flex-col items-center justify-center bg-background text-foreground mt-4">
       {/* Always render immediately */}
       <HeroSection />
 
@@ -65,6 +65,7 @@ export default function Page() {
         rootMargin="200px"
         fallback={<SectionSkeleton />}
         className="w-full"
+        id="features"
       >
         <Suspense fallback={<SectionSkeleton />}>
           <FeaturesShowcase />

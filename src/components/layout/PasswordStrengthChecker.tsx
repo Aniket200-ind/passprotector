@@ -151,11 +151,6 @@ export default function PasswordStrengthChecker() {
         completed: /[A-Z]/.test(password),
         tooltipMessage: "Mixing upper and lowercase letters increases entropy, strengthening your password against automated attacks."
       },
-      { 
-        text: "Include lowercase letters", 
-        completed: /[a-z]/.test(password),
-        tooltipMessage: "Using lowercase letters is essential for creating diverse, hard-to-guess passwords."
-      },
     ];
     
     return suggestions;
@@ -170,16 +165,17 @@ export default function PasswordStrengthChecker() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h2 className="text-3xl font-fancy font-bold sm:text-4xl md:text-5xl bg-gradient-to-r from-cyberBlue to-synthwavePink bg-clip-text text-transparent">
+          <h2 className="text-3xl font-fancy font-bold sm:text-4xl md:text-5xl bg-linear-to-r from-cyberBlue via-fuchsia-500 to-synthwavePink bg-clip-text text-transparent leading-normal">
             Test Your Password&apos;s Strength Instantly
           </h2>
-          <p className="max-w-[700px] font-primary mx-auto text-muted-foreground md:text-xl mt-4">
+          <p className="max-w-175 font-primary mx-auto text-muted-foreground md:text-xl mt-4">
             Instantly check if your password is strong enough to withstand cyber
             attacks.
           </p>
         </motion.div>
 
         <div className="max-w-4xl lg:max-w-5xl mx-auto py-12 grid lg:grid-cols-2 gap-10">
+          {/* Password Input Card */}
           <Card className="border-none bg-secondary/40">
             <CardContent className="px-6 py-4">
               <div className="space-y-6 lg:space-y-8">
@@ -208,7 +204,7 @@ export default function PasswordStrengthChecker() {
                   </Button>
                 </div>
 
-                <div className="h-[60px]"> {/* Fixed height container */}
+                <div className="h-15"> {/* Fixed height container */}
                   {isLoading ? (
                     <div className="flex justify-center items-center h-full">
                       <Loader2 className="animate-spin text-cyberBlue" />
@@ -237,6 +233,7 @@ export default function PasswordStrengthChecker() {
             </CardContent>
           </Card>
 
+          {/* Suggestions card */}
           <div className="bg-secondary/30 px-6 py-4 rounded-lg border text-center space-y-6">
             <h3 className="text-xl lg:text-2xl font-fancy font-semibold text-cyberBlue">
               Password Suggestions
@@ -246,9 +243,9 @@ export default function PasswordStrengthChecker() {
                 <li key={index} className="flex items-center">
                   <div className="flex items-center flex-1">
                     {suggestion.completed ? (
-                      <CheckCircle className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
+                      <CheckCircle className="h-4 w-4 text-green-400 mr-2 shrink-0" />
                     ) : (
-                      <Circle className="h-4 w-4 text-muted-foreground/50 mr-2 flex-shrink-0" />
+                      <Circle className="h-4 w-4 text-muted-foreground/50 mr-2 shrink-0" />
                     )}
                     <span className={`text-sm ${
                       suggestion.completed ? "text-green-400" : "text-white"
