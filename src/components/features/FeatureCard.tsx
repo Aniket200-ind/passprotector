@@ -18,14 +18,14 @@ export function FeatureCard({ feature, index }: FeatureCardProps) {
   return (
     <motion.div
       role="article"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 1, delay: index * 0.15, ease: "easeOut" }}
-      className="bg-secondary backdrop-blur-sm rounded-lg p-6 border border-secondary/20 transition-all duration-300 sm:hover:shadow-lg sm:hover:animate-cyberpunk-glow select-none group"
+      transition={{ duration: 1, delay: index * 0.1, ease: "easeOut" }}
+      className="bg-charcoal backdrop-blur-sm rounded-lg p-6 border border-secondary transition-all duration-300 sm:hover:shadow-lg sm:hover:animate-cyberpunk-glow select-none group"
     >
       <div className="flex flex-col items-center text-center">
-        <div className="mb-4 p-3 rounded-full bg-charcoal group-hover:bg-cyberpunk/30 transition-all mix-blend-screen duration-300">
+        <div className="mb-4 p-3 rounded-full bg-secondary/60 group-hover:bg-cyberpunk/30 transition-all mix-blend-screen duration-300">
           {feature.icon}
         </div>
         <h3 className="text-xl font-fancy font-semibold mb-2 text-white group-hover:text-cyberBlue transition-all duration-300">
