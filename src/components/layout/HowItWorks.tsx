@@ -74,8 +74,6 @@ export default function HowItWorks() {
       ref={sectionRef}
       className="py-20 px-4 md:px-8 relative overflow-hidden"
     >
-      {/* Background grid effect */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#121212_1px,transparent_1px),linear-gradient(to_bottom,#121212_1px,transparent_1px)] bg-size-[24px_24px] opacity-20"></div>
 
       <div className="max-w-6xl mx-auto">
         <motion.h2
