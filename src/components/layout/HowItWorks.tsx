@@ -76,11 +76,11 @@ export default function HowItWorks() {
       className="py-20 px-4 md:px-8 relative overflow-hidden"
     >
       {/* Background grid effect */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#121212_1px,transparent_1px),linear-gradient(to_bottom,#121212_1px,transparent_1px)] bg-[size:24px_24px] opacity-20"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#121212_1px,transparent_1px),linear-gradient(to_bottom,#121212_1px,transparent_1px)] bg-size-[24px_24px] opacity-20"></div>
 
       <div className="max-w-6xl mx-auto">
         <motion.h2
-          className="text-4xl md:text-5xl font-fancy text-center mb-12 bg-gradient-to-r from-cyberBlue via-fuchsia-500 to-synthwavePink bg-clip-text text-transparent"
+          className="text-4xl md:text-5xl font-fancy text-center mb-12 bg-linear-to-r from-cyberBlue via-fuchsia-500 to-synthwavePink bg-clip-text text-transparent"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -146,7 +146,7 @@ export default function HowItWorks() {
             {/* Progress bar */}
             <div className="absolute top-8 left-0 w-full h-0.5 bg-secondary/30">
               <motion.div
-                className="h-full bg-gradient-to-r from-cyberBlue to-synthwavePink shadow-cyberpunk"
+                className="h-full bg-linear-to-r from-cyberBlue to-synthwavePink shadow-cyberpunk"
                 initial={{ width: "0%" }}
                 animate={{
                   width: `${(activeStep / (steps.length - 1)) * 100}%`,
@@ -163,7 +163,7 @@ export default function HowItWorks() {
             {/* Vertical progress line */}
             <div className="absolute left-7 top-0 w-0.5 h-full bg-secondary/30">
               <motion.div
-                className="w-full bg-gradient-to-b from-cyberBlue to-synthwavePink shadow-cyberpunk"
+                className="w-full bg-linear-to-b from-cyberBlue to-synthwavePink shadow-cyberpunk"
                 initial={{ height: "0%" }}
                 animate={{
                   height: `${(activeStep / (steps.length - 1)) * 100}%`,
@@ -183,7 +183,7 @@ export default function HowItWorks() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <div
-                  className={`flex-shrink-0 flex items-center justify-center w-14 h-14 rounded-full mr-4 z-10 transition-all duration-300 ${
+                  className={`shrink-0 flex items-center justify-center w-14 h-14 rounded-full mr-4 z-10 transition-all duration-300 ${
                     index <= activeStep
                       ? "bg-secondary shadow-cyberpunk"
                       : "bg-secondary/30"
