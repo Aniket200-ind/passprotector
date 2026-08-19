@@ -43,7 +43,6 @@ export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Handle scroll-based step activation
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return;
@@ -74,7 +73,6 @@ export default function HowItWorks() {
       ref={sectionRef}
       className="py-20 px-4 md:px-8 relative overflow-hidden"
     >
-
       <div className="max-w-6xl mx-auto">
         <motion.h2
           className="text-4xl md:text-5xl font-fancy text-center mb-12 bg-linear-to-r from-cyberBlue via-fuchsia-500 to-synthwavePink bg-clip-text text-transparent"
