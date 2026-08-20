@@ -167,7 +167,7 @@ export function PassphraseGenerator() {
   }, [options, isLoading, handleOptionChange]);
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
+    <Card className="w-full bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
       <CardHeader>
         <CardTitle className="text-2xl sm:text-3xl font-fancy text-center text-golden drop-shadow-md">
           Passphrase Generator 🔑
@@ -181,7 +181,7 @@ export function PassphraseGenerator() {
           aria-label="Generated Passphrase"
         >
           <motion.div
-            className={`p-4 rounded-lg font-mono text-center text-cyberBlue break-all ${
+            className={`min-h-24 rounded-lg font-mono flex items-center justify-center text-cyberBlue break-all ${
               passphrase
                 ? "border-2 " +
                   (strength.score < 30
@@ -215,7 +215,7 @@ export function PassphraseGenerator() {
             size="icon"
             onClick={copyToClipboard}
             disabled={!passphrase || isLoading}
-            className="h-10 w-10 bg-rose-600 hover:bg-synthwavePink shadow-md shadow-red-500/50"
+            className="h-10 w-10 bg-rose-600 hover:bg-synthwavePink shadow-md shadow-red-500/50 cursor-pointer"
             aria-label="Copy Passphrase to Clipboard"
           >
             <Copy className="h-5 w-5 text-white" />
@@ -224,7 +224,7 @@ export function PassphraseGenerator() {
             size="icon"
             onClick={generatePassphrase}
             disabled={isLoading}
-            className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50"
+            className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50 cursor-pointer"
             aria-label="Generate new Passphrase"
           >
             {isLoading ? (
