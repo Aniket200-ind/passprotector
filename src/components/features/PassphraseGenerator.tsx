@@ -262,7 +262,7 @@ export function PassphraseGenerator() {
               min={4}
               max={12}
               step={1}
-              className="password-slider"
+              className="password-slider mt-2"
               disabled={isLoading}
               aria-label="Word Count"
               aria-valuemin={4}

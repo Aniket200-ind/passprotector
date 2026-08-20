@@ -207,7 +207,7 @@ export function PasswordGenerator() {
         />
 
         <div className="space-y-4">
-          <div className="space-y-2">
+          <div>
             <label
               htmlFor="length-slider"
               className="text-sm font-medium text-synthwavePink"
@@ -221,7 +221,7 @@ export function PasswordGenerator() {
               max={64}
               step={1}
               disabled={isLoading}
-              className="password-slider"
+              className="password-slider mt-2"
               aria-label="Password Length"
               aria-valuemin={8}
               aria-valuemax={64}
