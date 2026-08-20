@@ -5,7 +5,6 @@
 import { motion } from "framer-motion";
 import SuggestionTooltip from "./CustomToolTip";
 
-
 interface StrengthMeterProps {
   score: number;
   PasswordStrength: string;
@@ -30,7 +29,9 @@ export function StrengthMeter({ score, PasswordStrength }: StrengthMeterProps) {
     <div className="w-full space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-cyberBlue">Password Strength</span>
+          <span className="text-sm font-medium text-cyberBlue">
+            Password Strength
+          </span>
           <SuggestionTooltip message="Strength is estimated from password length and character variety. A strong rating reduces risk but doesn't guarantee complete security." />
         </div>
         <motion.span
@@ -44,9 +45,7 @@ export function StrengthMeter({ score, PasswordStrength }: StrengthMeterProps) {
         >
           {/* Keeping emoji separate so it retains its original color */}
           <span>{getEmoji(score)}</span>
-          <span className="text-white">
-            {PasswordStrength}
-          </span>
+          <span className="text-white">{PasswordStrength}</span>
         </motion.span>
       </div>
       <div className="h-2 w-full rounded-full bg-secondary relative overflow-hidden">
