@@ -227,21 +227,6 @@
     @apply relative h-1.5 w-full rounded-full bg-gradient-to-r from-[#ff007f] to-[#00ffff] transition-colors duration-300;
   }
 
-  .password-slider::-webkit-slider-runnable-track {
-    height: 6px;
-    background: linear-gradient(90deg, #ff007f, #00ffff);
-    border-radius: 4px;
-  }
-
-  .password-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-  }
-
-  .password-slider:focus {
-    outline: none;
-    box-shadow: 0 0 5px #ffd700;
-  }
-
   .shadow-cyberpunk {
     @apply animate-cyberpunk-glow;
   }
