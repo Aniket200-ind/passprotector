@@ -131,7 +131,7 @@ export function PasswordGenerator() {
   }, [options, isLoading, handleOptionChange]);
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
+    <Card className="w-full bg-charcoal shadow-lg shadow-cyberBlue/30 rounded-xl">
       <CardHeader>
         <CardTitle className="text-2xl sm:text-3xl font-fancy text-center text-golden drop-shadow-md">
           Password Generator 🔐
@@ -144,7 +144,7 @@ export function PasswordGenerator() {
           tabIndex={0}
         >
           <motion.div
-            className={`p-4 rounded-lg relative text-wrap overflow-x-auto max-w-full font-mono text-center text-cyberBlue ${
+            className={`min-h-24 flex items-center justify-center rounded-lg relative break-all overflow-x-auto w-full font-mono text-cyberBlue ${
               password
                 ? "border-2 " +
                   (strength.score < 30
@@ -178,7 +178,7 @@ export function PasswordGenerator() {
             size="icon"
             onClick={copyToClipboard}
             disabled={!password || isLoading}
-            className="h-10 w-10 bg-rose-700 hover:bg-synthwavePink shadow-md shadow-red-500/50"
+            className="h-10 w-10 bg-rose-700 hover:bg-synthwavePink shadow-md shadow-red-500/50 cursor-pointer"
             aria-label="Copy Password to Clipboard"
           >
             <Copy className="h-5 w-5 text-white" />
@@ -187,7 +187,7 @@ export function PasswordGenerator() {
             size="icon"
             onClick={generatePassword}
             disabled={isLoading}
-            className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50"
+            className="h-10 w-10 bg-deepPurple hover:bg-purple-600 shadow-md shadow-purple-500/50 cursor-pointer"
             aria-label="Generate Password"
           >
             {isLoading ? (
