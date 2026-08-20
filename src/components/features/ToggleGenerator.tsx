@@ -22,10 +22,7 @@ const ToggleGenerator = () => {
       aria-label="Toggle between password and passphrase generator"
     >
       <TabsList
-        className={cn(
-          "rounded-lg",
-          "bg-golden/30 border border-golden",
-        )}
+        className={cn("rounded-lg", "bg-golden/30 border border-golden")}
       >
         <TabsTrigger
           value="password"
