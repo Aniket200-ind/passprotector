@@ -29,7 +29,7 @@ const ToggleGenerator = () => {
         <TabsTrigger
           value="password"
           className={cn(
-            "px-5 py-2 rounded-md transition-all duration-300",
+            "px-5 py-2 rounded-md transition-all duration-300 cursor-pointer",
             activeTab === "password"
               ? "text-cyberBlue bg-deepPurple shadow-cyberpunk"
               : "text-gray-400 hover:text-cyberBlue"
@@ -41,7 +41,7 @@ const ToggleGenerator = () => {
         <TabsTrigger
           value="passphrase"
           className={cn(
-            "px-5 py-2 rounded-md transition-all duration-300",
+            "px-5 py-2 rounded-md transition-all duration-300 cursor-pointer",
             activeTab === "passphrase"
               ? "text-synthwavePink bg-deepPurple shadow-cyberpunk"
               : "text-gray-400 hover:text-synthwavePink"
