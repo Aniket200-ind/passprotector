@@ -58,7 +58,7 @@ export function PassphraseGenerator() {
       { value: "_", label: "_ (Underscore)" },
       { value: ".", label: ". (Period)" },
     ],
-    []
+    [],
   );
 
   const generatePassphrase = useCallback(async () => {
@@ -93,7 +93,7 @@ export function PassphraseGenerator() {
             color: "#FFD700",
             border: "1px solid #FF007F",
           },
-        }
+        },
       );
     } finally {
       setIsLoading(false);
@@ -187,10 +187,10 @@ export function PassphraseGenerator() {
                   (strength.score < 30
                     ? "border-red-600"
                     : strength.score < 60
-                    ? "border-orange-500"
-                    : strength.score < 80
-                    ? "border-yellow-500"
-                    : "border-green-500")
+                      ? "border-orange-500"
+                      : strength.score < 80
+                        ? "border-yellow-500"
+                        : "border-green-500")
                 : "border-2 border-cyberBlue"
             }`}
             animate={{ scale: passphrase ? [1, 1.02, 1] : 1 }}
