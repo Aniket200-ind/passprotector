@@ -150,10 +150,10 @@ export function PasswordGenerator() {
                   (strength.score < 30
                     ? "border-red-600"
                     : strength.score < 60
-                    ? "border-orange-500"
-                    : strength.score < 80
-                    ? "border-yellow-500"
-                    : "border-green-500")
+                      ? "border-orange-500"
+                      : strength.score < 80
+                        ? "border-yellow-500"
+                        : "border-green-500")
                 : "border-2 border-cyberBlue"
             }`}
             animate={{ scale: password ? [1, 1.02, 1] : 1 }}
