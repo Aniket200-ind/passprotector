@@ -137,7 +137,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
             </SheetTrigger>
             <SheetContent
               side="left"
-              className="border-r-deepPurple/20 bg-charcoal/95 backdrop-blur-xl"
+              className="bg-charcoal/95 backdrop-blur-xl"
             >
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2 font-montserrat text-xl font-bold text-cyberBlue">
@@ -163,7 +163,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                   </Link>
                 ))}
                 </div>
-                <div className="mt-4 border-t border-deepPurple/20 pt-4">
+                <div className="mt-4 border-t border-cyberBlue pt-4">
                   {user ? (
                     <>
                       <div className="mb-4 flex items-center gap-3">
