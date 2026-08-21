@@ -23,7 +23,7 @@ export default function LoginButton() {
     <Button
       variant="outline"
       className="w-full py-4 relative overflow-hidden rounded-lg border border-golden text-golden 
-                 bg-transparent backdrop-blur-md transition-all duration-300 ease-in-out
+                 bg-transparent backdrop-blur-md transition-all duration-300 ease-in-out cursor-pointer
                  hover:bg-golden/20 hover:text-white hover:shadow-[0_0_15px_#FFD700] 
                  active:scale-95 disabled:opacity-50"
       type="button"
