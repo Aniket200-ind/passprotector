@@ -218,9 +218,28 @@
   .password-slider {
     @apply relative h-1.5 w-full rounded-full bg-linear-to-r from-synthwavePink to-cyberBlue transition-colors duration-300;
   }
-
+  
   .shadow-cyberpunk {
     @apply animate-cyberpunk-glow;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(26, 26, 46, 0.8);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #00ff00;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #00ff00 0%, #00ccff 100%);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
   }
 }
 
