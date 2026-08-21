@@ -36,8 +36,8 @@ const SectionSkeleton = () => (
 
 export default function Page() {
   return (
-    <main className="flex flex-col items-center justify-center bg-background text-foreground mt-4">
-      {/* Always render immediately */}
+    <main className="bg-background text-foreground mt-4">
+      {/* Always render */}
       <HeroSection />
 
       {/* Double-optimized sections using both lazy loading and conditional rendering */}
