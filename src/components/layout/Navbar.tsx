@@ -90,7 +90,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="relative h-8 w-8 rounded-full">
+                <Button className="relative h-8 w-8 rounded-full cursor-pointer">
                   <Avatar className="h-10 w-10 border-2 border-deepPurple/50 transition-all hover:border-cyberBlue/50">
                     <AvatarImage
                       src={user.image || ""}
@@ -111,15 +111,6 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                   <p className="text-xs text-gray-400">{user.email}</p>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/dashboard"
-                    className="flex cursor-pointer items-center"
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
-                  </Link>
-                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="flex cursor-pointer items-center text-red-500 focus:text-red-500"
