@@ -28,8 +28,8 @@ export default function NotFound() {
           <Button
             variant="default"
             size="lg"
-            className="font-primary transition-all duration-300 ease-in-out
-                       hover:scale-105 hover:bg-synthwavePink hover:text-black
+            className="font-primary transition-all duration-300 ease-in-out cursor-pointer
+                       hover:scale-105 hover:bg-golden/65 hover:text-white
                        hover:shadow-golden/50
                        focus:outline-none focus:ring-2 focus:ring-golden focus:ring-offset-2 focus:ring-offset-background mt-8"
           >
