@@ -156,8 +156,9 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                   </span>
                 </SheetTitle>
               </SheetHeader>
-              <nav className="mt-8 flex flex-col gap-6">
-                {navLinks.map((link) => (
+              <nav className="py-6 h-full flex flex-col justify-between gap-6">
+                <div className="space-y-6">
+                  {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -170,6 +171,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                     {link.label}
                   </Link>
                 ))}
+                </div>
                 <div className="mt-4 border-t border-deepPurple/20 pt-4">
                   {user ? (
                     <>
@@ -204,7 +206,7 @@ export function Navbar({ user, handleLogout }: NavbarProps) {
                     </>
                   ) : (
                     <Button
-                      className="w-full bg-linear-to-r from-cyberBlue to-synthwavePink text-white hover:from-cyberBlue hover:to-synthwavePink"
+                      className="w-full bg-linear-to-tr from-synthwavePink to-deepPurple text-white active:from-deepPurple hover:to-synthwavePink"
                       onClick={closeSheet}
                     >
                       <Link href="/login">Login</Link>
