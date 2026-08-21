@@ -3,25 +3,17 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
-/* darkMode: "class" equivalent — v4 defaults to media-query dark mode,
-   this restores the .dark-class-based behavior your app relies on */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Fonts — values point at the CSS vars next/font injects in layout.tsx.
-     NOTE: "mono" and "fancy" were renamed on the next/font side
-     (--font-jetbrains-mono / --font-montserrat) to avoid colliding with
-     these same-named theme tokens. See layout.tsx. */
   --font-primary: var(--font-inter), Inter, sans-serif;
   --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
   --font-fancy: var(--font-montserrat), Montserrat, sans-serif;
 
-  /* Radius */
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  /* shadcn-style semantic colors */
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -203,11 +195,11 @@
   }
 
   .loading-container {
-    @apply relative flex h-screen w-screen items-center justify-center overflow-hidden bg-black text-green-500;
+    @apply relative flex h-screen items-center justify-center overflow-hidden bg-black;
   }
 
   .binary-overlay {
-    @apply absolute top-0 left-0 flex h-full w-screen flex-col gap-5 overflow-hidden;
+    @apply absolute flex items-center h-full w-screen flex-col gap-5 overflow-hidden;
   }
 
   .binary-scroll {
@@ -224,30 +216,11 @@
   }
 
   .password-slider {
-    @apply relative h-1.5 w-full rounded-full bg-gradient-to-r from-[#ff007f] to-[#00ffff] transition-colors duration-300;
+    @apply relative h-1.5 w-full rounded-full bg-linear-to-r from-synthwavePink to-cyberBlue transition-colors duration-300;
   }
 
   .shadow-cyberpunk {
     @apply animate-cyberpunk-glow;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(26, 26, 46, 0.8);
-    border-radius: 3px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #00ff00;
-    border-radius: 3px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #00ff00 0%, #00ccff 100%);
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
   }
 }
 
