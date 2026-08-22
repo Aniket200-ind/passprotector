@@ -53,7 +53,7 @@ export default function Footer() {
       <div className="h-px w-full bg-linear-to-r from-transparent via-synthwavePink/30 to-transparent"></div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:items-center md:justify-items-center">
           {/* Left section - Quick Links */}
           <div className="animate-fade-in-up space-y-4">
             <h3 className="font-fancy text-lg font-semibold text-foreground">
@@ -184,9 +184,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Bottom gradient line */}
-      <div className="h-px w-full bg-linear-to-r from-transparent via-cyberBlue/30 to-transparent"></div>
     </footer>
   );
 }
